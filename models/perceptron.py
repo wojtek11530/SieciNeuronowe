@@ -2,10 +2,11 @@ import numpy as np
 
 from functions.activation_functions import unipolar_activation
 from functions.loss_functions import loss_function
+from models.base import BaseModel
 from utils.random import get_random_float
 
 
-class Perceptron:
+class Perceptron(BaseModel):
     def __init__(self, input_dim: int, weight_limit: float = 1, activation_fn=unipolar_activation):
         if weight_limit > 1:
             weight_limit = 1
@@ -38,9 +39,7 @@ class Perceptron:
         else:
             return False
 
-    def __call__(self, x: np.ndarray):
-        result = self.forward(x)
-        return result
+
 
     def __str__(self):
         return 'weights: ' + ', '.join([str(w) for w in self.weights]) + ', bias: ' + str(self.bias)
