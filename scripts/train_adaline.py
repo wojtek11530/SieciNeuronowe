@@ -1,6 +1,5 @@
 from dataset.and_dataset import get_dataset
 from functions.evaluate_model import evaluate_model
-
 from functions.tran_model import train_model
 from models.adaline import Adaline
 

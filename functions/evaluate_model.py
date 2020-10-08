@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Union
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -33,10 +33,7 @@ def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: b
 
     x1 = np.linspace(zero_val, 1, 100)
     if type(model) in [Perceptron, Adaline]:
-        w1 = model.weights[0]
-        w2 = model.weights[1]
-        b = model.bias
-        plt.plot(x1, 1 / w2 * (-w1 * x1 - b), color='grey')
+        plot_separating_lin(model, x1)
     plt.xlabel(r'$x_1$')
     plt.ylabel(r'$x_2$')
     plt.title(title)
@@ -45,3 +42,10 @@ def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: b
     plt.ylim(zero_val - step, 1 + step)
     if show:
         plt.show()
+
+
+def plot_separating_lin(model: Union[Perceptron, Adaline], x1: np.ndarray):
+    w1 = model.weights[0]
+    w2 = model.weights[1]
+    b = model.bias
+    plt.plot(x1, 1 / w2 * (-w1 * x1 - b), color='grey')

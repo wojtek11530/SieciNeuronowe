@@ -24,4 +24,3 @@ if __name__ == '__main__':
     weight_lim = 0.1
     run_training(weight_lim, unipolar=True)
     run_training(weight_lim, unipolar=False)
-

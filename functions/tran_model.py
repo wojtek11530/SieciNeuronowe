@@ -23,7 +23,7 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
     return epoch_num
 
 
-def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float, error_margin: float ) -> bool:
+def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float, error_margin: float) -> bool:
     x_set, y_set = dataset
     continue_training = model.update_weight(x_set, y_set, lr, error_margin)
     return continue_training
