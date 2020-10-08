@@ -9,7 +9,7 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
                 verbose: bool = True) -> int:
     continue_training = True
     epoch_num = 1
-    print(f'Training started, lr={lr}')
+    print(f'Training started, lr={lr}, {type(model)}')
     while continue_training:
         if verbose:
             print(f'Epoch {epoch_num}', end='')
