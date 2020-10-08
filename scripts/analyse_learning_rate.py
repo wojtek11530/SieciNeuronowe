@@ -16,7 +16,7 @@ def analyze(mc_sim_num: int = 10):
     l_rates = np.sort(l_rates)
     weight_limit = np.array([0.2, 0.4, 0.6, 0.8, 1.0])
 
-    dataset = get_dataset(case_gen_data_number=5)
+    dataset = get_dataset(noise_data_number=5)
     avg_epochs_numbers = []
     for w_limit in weight_limit:
         avg_epochs_numbers_for_weight = []
