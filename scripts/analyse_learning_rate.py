@@ -8,7 +8,7 @@ from functions.tran_model import train_model
 from models.perceptron import Perceptron
 
 
-def analyze(mc_sim_num: int = 10):
+def analyze(simulations_num: int = 10):
     powers = np.arange(-1, -5, -1)
 
     l_rates = np.concatenate([[0.99, 0.9, 0.75, 0.5, 0.25], np.power([10.] * len(powers), powers),
@@ -22,7 +22,7 @@ def analyze(mc_sim_num: int = 10):
         avg_epochs_numbers_for_weight = []
         for lr in l_rates:
             lr_epochs_num = []
-            for _ in range(mc_sim_num):
+            for _ in range(simulations_num):
                 perceptron = Perceptron(2, weight_limit=w_limit)
                 epoch_num = train_model(perceptron, dataset, lr, verbose=False)
                 lr_epochs_num.append(epoch_num)

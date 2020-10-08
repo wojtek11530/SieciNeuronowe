@@ -15,7 +15,8 @@ def train_model(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.array], lr
             print(f',\t {str(perceptron)}')
 
         any_weight_updated = train_one_epoch(perceptron, dataset, lr)
-        epoch_num += 1
+        if any_weight_updated:
+            epoch_num += 1
 
     print(f'No weights updated. Training ends. Epochs total={epoch_num}')
     return epoch_num
