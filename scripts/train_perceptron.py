@@ -1,7 +1,6 @@
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import bipolar_activation, unipolar_activation
 from functions.evaluate_model import evaluate_model
-from functions.loss_functions import bipolar_loss_function, unipolar_loss_function
 from functions.tran_model import train_model
 from models.perceptron import Perceptron
 
@@ -14,11 +13,9 @@ def run_training(weight_limit: float, unipolar: bool = True):
     else:
         print('BIPOLAR training')
     if unipolar:
-        perceptron = Perceptron(2, weight_limit=weight_limit, loss_fn=unipolar_loss_function,
-                                activation_fn=unipolar_activation)
+        perceptron = Perceptron(2, weight_limit=weight_limit, activation_fn=unipolar_activation)
     else:
-        perceptron = Perceptron(2, weight_limit=weight_limit, loss_fn=bipolar_loss_function,
-                                activation_fn=bipolar_activation)
+        perceptron = Perceptron(2, weight_limit=weight_limit, activation_fn=bipolar_activation)
     train_model(perceptron, dataset, learning_rate)
     evaluate_model(perceptron, get_dataset(noise_data_number=2, unipolar=unipolar))
 
