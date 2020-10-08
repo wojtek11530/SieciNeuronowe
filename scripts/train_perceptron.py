@@ -17,7 +17,7 @@ def run_training(weight_limit: float, unipolar: bool = True):
     else:
         perceptron = Perceptron(2, weight_limit=weight_limit, activation_fn=bipolar_activation)
     train_model(perceptron, dataset, learning_rate)
-    evaluate_model(perceptron, get_dataset(noise_data_number=2, unipolar=unipolar))
+    evaluate_model(perceptron, get_dataset(noise_data_number=2, unipolar=unipolar), unipolar=unipolar)
 
 
 if __name__ == '__main__':

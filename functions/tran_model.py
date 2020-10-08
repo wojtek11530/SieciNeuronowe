@@ -2,27 +2,28 @@ from typing import Tuple
 
 import numpy as np
 
-from models.perceptron import Perceptron
+from models.base import BaseModel
 
 
-def train_model(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.array], lr: float, verbose: bool = True) -> int:
-    any_weight_updated = True
+def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: float, error_margin: float = 0,
+                verbose: bool = True) -> int:
+    continue_training = True
     epoch_num = 1
     print(f'Training started, lr={lr}')
-    while any_weight_updated:
+    while continue_training:
         if verbose:
             print(f'Epoch {epoch_num}', end='')
-            print(f',\t {str(perceptron)}')
+            print(f',\t {str(model)}')
 
-        any_weight_updated = train_one_epoch(perceptron, dataset, lr)
-        if any_weight_updated:
+        continue_training = train_one_epoch(model, dataset, lr, error_margin)
+        if continue_training:
             epoch_num += 1
 
-    print(f'No weights updated. Training ends. Epochs total={epoch_num}')
+    print(f'Training ends. Epochs total={epoch_num}')
     return epoch_num
 
 
-def train_one_epoch(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.ndarray], lr: float) -> bool:
+def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float, error_margin: float ) -> bool:
     x_set, y_set = dataset
-    any_weight_updated_in_epoch = perceptron.update_weight(x_set, y_set, lr)
-    return any_weight_updated_in_epoch
+    continue_training = model.update_weight(x_set, y_set, lr, error_margin)
+    return continue_training
