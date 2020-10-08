@@ -22,11 +22,7 @@ def train_model(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.array], lr
     return epoch_num
 
 
-def train_one_epoch(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.array], lr: float) -> bool:
-    any_weight_updated_in_epoch = False
+def train_one_epoch(perceptron: Perceptron, dataset: Tuple[np.ndarray, np.ndarray], lr: float) -> bool:
     x_set, y_set = dataset
-    for x, y in zip(x_set, y_set):
-        weight_updated = perceptron.update_weight(x, y, lr)
-        any_weight_updated_in_epoch = weight_updated or any_weight_updated_in_epoch
-
+    any_weight_updated_in_epoch = perceptron.update_weight(x_set, y_set, lr)
     return any_weight_updated_in_epoch
