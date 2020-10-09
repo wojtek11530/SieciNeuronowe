@@ -34,13 +34,14 @@ def analyze_mse_for_different_learning_rates():
 
 
 def analyze(simulations_num: int = 10):
-    max_epoch = 100
+    max_epoch = 1000
+    error_margin = 0.2
 
     powers = np.arange(-2, -6, -1)
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
                               5 * np.power([10.] * len(powers[1:]), powers[1:])])
     l_rates = np.sort(l_rates)
-    weight_limit = np.array([0.2, 0.5, 1.0])
+    weight_limit = np.array([0.1, 0.2, 0.5, 1.0])
 
     dataset = get_dataset(noise_data_number=5)
     avg_epochs_numbers = []
@@ -50,7 +51,9 @@ def analyze(simulations_num: int = 10):
             lr_epochs_num = []
             for _ in range(simulations_num):
                 perceptron = Adaline(2, weight_limit=w_limit)
-                epoch_num, _ = train_model(perceptron, dataset, lr, max_epoch=max_epoch, verbose=False)
+                epoch_num, mse = train_model(perceptron, dataset, lr, max_epoch=max_epoch, verbose=False,
+                                             error_margin=error_margin)
+                print(f'MSE: {mse[-1]}')
                 lr_epochs_num.append(epoch_num)
 
             avg_epochs_numbers_for_weight.append(np.mean(lr_epochs_num))
@@ -78,7 +81,7 @@ def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num
 
     plt.legend()
     plt.grid()
-    plt.loglog()
+    plt.semilogx()
     plt.xlabel('learning rate')
     plt.ylabel('epochs number')
     plt.show()
@@ -86,4 +89,4 @@ def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num
 
 if __name__ == '__main__':
     # analyze_mse_for_different_learning_rates()
-    analyze(10)
+    analyze(20)
