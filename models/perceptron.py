@@ -1,3 +1,5 @@
+from typing import Optional, Tuple
+
 import numpy as np
 
 from functions.activation_functions import unipolar_activation
@@ -21,7 +23,8 @@ class Perceptron(BaseModel):
         z = np.dot(x, self.weights) + self.bias
         return self.activation_fn(z)
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) -> bool:
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
+            -> Tuple[bool, Optional[float]]:
         any_weight_updated_in_epoch = False
         y_pred = self(x_set)
         deltas = self.loss_fn(y_set, y_pred)
@@ -29,7 +32,7 @@ class Perceptron(BaseModel):
             weight_updated = self._update_weight_for_one_input(x, delta, lr)
             any_weight_updated_in_epoch = weight_updated or any_weight_updated_in_epoch
 
-        return any_weight_updated_in_epoch
+        return any_weight_updated_in_epoch, None
 
     def _update_weight_for_one_input(self, x: np.ndarray, delta: float, lr: float) -> bool:
         if delta != 0:

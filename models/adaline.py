@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import numpy as np
 
 from functions.activation_functions import bipolar_activation
@@ -21,16 +23,18 @@ class Adaline(BaseModel):
         z = np.dot(x, self.weights) + self.bias
         return self.activation_fn(z)
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) -> bool:
-        y_pred = self(x_set)
-        deltas = self.loss_fn(y_set, y_pred)
-        mean_squared_error = np.mean(np.power(deltas, 2))
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
+            -> Tuple[bool, float]:
+        z = np.dot(x_set, self.weights) + self.bias
+        deltas = self.loss_fn(y_set, z)
+        mean_squared_error = float(np.mean(np.power(deltas, 2)))
+        print(f'MSE: {mean_squared_error}')
         if mean_squared_error > error_margin:
             for x, delta in zip(x_set, deltas):
                 self._update_weight_for_one_input(x, delta, lr)
-            return True
+            return True, mean_squared_error
         else:
-            return False
+            return False, mean_squared_error
 
     def _update_weight_for_one_input(self, x: np.ndarray, delta: float, lr: float) -> None:
         self.weights += 2 * lr * delta * x
