@@ -12,7 +12,7 @@ def analyze(simulations_num: int = 10):
     l_rates = np.concatenate([[0.99, 0.9, 0.75, 0.5, 0.25], np.power([10.] * len(powers), powers),
                               5 * np.power([10.] * len(powers[1:]), powers[1:])])
     l_rates = np.sort(l_rates)
-    weight_limit = np.array([0.2, 0.4, 0.6, 0.8, 1.0])
+    weight_limit = np.array([0.2, 0.5, 1.0])
 
     dataset = get_dataset(noise_data_number=5)
     avg_epochs_numbers = []
