@@ -25,8 +25,8 @@ def run_training():
 
 
 def plot_mean_square_errors(epoch_num, mean_squared_errors):
-    plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '.-')
-    plt.xlabel('Epochs')
+    plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '.--')
+    plt.xlabel('Epoka')
     plt.ylabel('MSE')
     plt.grid()
     plt.show()

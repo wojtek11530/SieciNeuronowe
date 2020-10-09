@@ -11,7 +11,7 @@ from models.adaline import Adaline
 def analyze_mse_for_different_learning_rates():
     weight_limit = 1.0
     error_margin = 0.1
-    max_epoch = 50
+    max_epoch = 100
 
     powers = np.arange(-2, -6, -1)
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
@@ -33,7 +33,7 @@ def analyze_mse_for_different_learning_rates():
     plot_mse_for_different_lr(l_rates, epochs_num_for_lr, mse_for_lr)
 
 
-def analyze(simulations_num: int = 10):
+def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations_num: int = 10):
     max_epoch = 1000
     error_margin = 0.2
 
@@ -66,9 +66,9 @@ def analyze(simulations_num: int = 10):
 
 def plot_mse_for_different_lr(learning_rates: np.ndarray, epochs_num_for_lr: List[int], mse_for_lr: List[List[float]]):
     for lr, epoch_num, mean_squared_errors in zip(learning_rates, epochs_num_for_lr, mse_for_lr):
-        plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '.-', label=r'$lr$=' + str(lr))
+        plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, 'o-', label=r'$lr={0}$'.format(lr))
 
-    plt.xlabel('Epochs')
+    plt.xlabel('Epoka')
     plt.ylabel('MSE')
     plt.legend()
     plt.grid()
@@ -77,16 +77,17 @@ def plot_mse_for_different_lr(learning_rates: np.ndarray, epochs_num_for_lr: Lis
 
 def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num: np.ndarray):
     for weight, epoch_num_for_weight in zip(weight_limit, epoch_num):
-        plt.plot(learning_rates, epoch_num_for_weight, '*--', label=r'$w_{lim}$=' + str(weight))
+        plt.plot(learning_rates, epoch_num_for_weight, '*--',
+                 label=r'$w_{{\mathrm{{pocz}}}}\in(${0}$,${1}$)$'.format(-weight, weight))
 
     plt.legend()
     plt.grid()
     plt.semilogx()
-    plt.xlabel('learning rate')
-    plt.ylabel('epochs number')
+    plt.xlabel('Współczynnik uczenia')
+    plt.ylabel('Liczba epok')
     plt.show()
 
 
 if __name__ == '__main__':
-    # analyze_mse_for_different_learning_rates()
-    analyze(20)
+    analyze_mse_for_different_learning_rates()
+    analyze_epochs_number_for_various_learning_rate_and_init_weights(25)

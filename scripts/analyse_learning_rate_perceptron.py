@@ -35,13 +35,14 @@ def analyze(simulations_num: int = 10):
 
 def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num: np.ndarray):
     for weight, epoch_num_for_weight in zip(weight_limit, epoch_num):
-        plt.plot(learning_rates, epoch_num_for_weight, '*--', label=r'$w_{lim}$=' + str(weight))
+        plt.plot(learning_rates, epoch_num_for_weight, '*--',
+                 label=r'$w_{{\mathrm{{pocz}}}}\in(${0}$,${1}$)$'.format(-weight, weight))
 
     plt.legend()
     plt.grid()
-    plt.loglog()
-    plt.xlabel('learning rate')
-    plt.ylabel('epochs number')
+    plt.semilogx()
+    plt.xlabel('Współczynnik uczenia')
+    plt.ylabel('Liczba epok')
     plt.show()
 
 
