@@ -6,7 +6,7 @@ from models.perceptron import Perceptron
 
 
 def run_training(weight_limit: float, unipolar: bool = True):
-    learning_rate = 0.1
+    learning_rate = 0.01
     dataset = get_dataset(noise_data_number=0, unipolar=unipolar)
     if unipolar:
         print('UNIPOLAR training')

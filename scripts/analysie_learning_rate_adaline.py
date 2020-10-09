@@ -50,8 +50,8 @@ def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations
         for lr in l_rates:
             lr_epochs_num = []
             for _ in range(simulations_num):
-                perceptron = Adaline(2, weight_limit=w_limit)
-                epoch_num, mse = train_model(perceptron, dataset, lr, max_epoch=max_epoch, verbose=False,
+                adaline = Adaline(2, weight_limit=w_limit)
+                epoch_num, mse = train_model(adaline, dataset, lr, max_epoch=max_epoch, verbose=False,
                                              error_margin=error_margin)
                 print(f'MSE: {mse[-1]}')
                 lr_epochs_num.append(epoch_num)
