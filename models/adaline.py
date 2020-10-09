@@ -28,7 +28,6 @@ class Adaline(BaseModel):
         z = np.dot(x_set, self.weights) + self.bias
         deltas = self.loss_fn(y_set, z)
         mean_squared_error = float(np.mean(np.power(deltas, 2)))
-        print(f'MSE: {mean_squared_error}')
         if mean_squared_error > error_margin:
             for x, delta in zip(x_set, deltas):
                 self._update_weight_for_one_input(x, delta, lr)

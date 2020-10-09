@@ -20,6 +20,8 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
             print(f',\t {str(model)}')
 
         continue_training, error = train_one_epoch(model, dataset, lr, error_margin)
+        if verbose and error:
+            print(f'Error: {str(error)}')
         errors.append(error)
 
         if plot_epoch:
