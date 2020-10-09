@@ -16,16 +16,17 @@ def get_dataset(noise_data_number: int = 10, unipolar: bool = True) -> Tuple[np.
 
     limit = 0.05
     for i in range(noise_data_number):
-        x.append([get_random_float(1 - limit, 1), get_random_float(1 - limit, 1)])
+        x.append([get_random_float(1 - limit, 1 + limit), get_random_float(1 - limit, 1 + limit)])
         y.append(1)
     for i in range(noise_data_number):
-        x.append([get_random_float(zero_val, zero_val + limit), get_random_float(zero_val, zero_val + limit)])
+        x.append([get_random_float(zero_val - limit, zero_val + limit),
+                  get_random_float(zero_val - limit, zero_val + limit)])
         y.append(zero_val)
     for i in range(noise_data_number):
-        x.append([get_random_float(zero_val, zero_val + limit), get_random_float(1 - limit, 1)])
+        x.append([get_random_float(zero_val - limit, zero_val + limit), get_random_float(1 - limit, 1 + limit)])
         y.append(zero_val)
     for i in range(noise_data_number):
-        x.append([get_random_float(1 - limit, 1), get_random_float(zero_val, zero_val + limit)])
+        x.append([get_random_float(1 - limit, 1 + limit), get_random_float(zero_val - limit, zero_val + limit)])
         y.append(zero_val)
 
     return np.array(x), np.array(y)
