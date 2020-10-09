@@ -21,8 +21,10 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
 
         continue_training, error = train_one_epoch(model, dataset, lr, error_margin)
         errors.append(error)
+
         if plot_epoch:
             plot_plane(model, unipolar=unipolar, title='Epoch ' + str(epoch_num))
+
         if continue_training:
             epoch_num += 1
 

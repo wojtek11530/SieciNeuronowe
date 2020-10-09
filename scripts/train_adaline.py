@@ -9,10 +9,10 @@ from models.adaline import Adaline
 
 def run_training():
     weight_limit = 1.0
-    learning_rate = 0.001
+    learning_rate = 0.1
     error_margin = 0.1
     max_epoch = 50
-    dataset = get_dataset(noise_data_number=10, unipolar=False)
+    dataset = get_dataset(noise_data_number=20, unipolar=False)
 
     adaline = Adaline(2, weight_limit=weight_limit)
     epoch_num, mean_squared_errors = train_model(adaline, dataset, learning_rate,

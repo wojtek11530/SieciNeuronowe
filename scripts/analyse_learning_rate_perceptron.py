@@ -22,7 +22,7 @@ def analyze(simulations_num: int = 10):
             lr_epochs_num = []
             for _ in range(simulations_num):
                 perceptron = Perceptron(2, weight_limit=w_limit)
-                epoch_num = train_model(perceptron, dataset, lr, verbose=False)
+                epoch_num, _ = train_model(perceptron, dataset, lr, verbose=False)
                 lr_epochs_num.append(epoch_num)
 
             avg_epochs_numbers_for_weight.append(np.mean(lr_epochs_num))
