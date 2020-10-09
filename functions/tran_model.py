@@ -1,4 +1,4 @@
-from typing import Tuple, Optional, List
+from typing import List, Optional, Tuple
 
 import numpy as np
 
@@ -9,7 +9,7 @@ from models.base import BaseModel
 def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: float, error_margin: float = 0,
                 max_epoch: Optional[int] = None, verbose: bool = True, unipolar: bool = True,
                 plot_epoch: bool = False) \
-        -> Tuple[int, Optional[List[float]]]:
+        -> Tuple[int, List[Optional[float]]]:
     continue_training = True
     epoch_num = 1
     errors = []
