@@ -11,7 +11,7 @@ from models.adaline import Adaline
 def analyze_mse_for_different_learning_rates():
     weight_limit = 1.0
     error_margin = 0.1
-    max_epoch = 100
+    max_epoch = 70
 
     powers = np.arange(-2, -6, -1)
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
@@ -21,6 +21,7 @@ def analyze_mse_for_different_learning_rates():
     mse_for_lr = []
     epochs_num_for_lr = []
     for lr in l_rates:
+        np.random.seed(42)
         adaline = Adaline(2, weight_limit=weight_limit)
         epoch_num, mean_squared_errors = train_model(adaline, dataset, lr,
                                                      error_margin=error_margin,
@@ -30,7 +31,7 @@ def analyze_mse_for_different_learning_rates():
         epochs_num_for_lr.append(epoch_num)
         mse_for_lr.append(mean_squared_errors)
 
-    plot_mse_for_different_lr(l_rates, epochs_num_for_lr, mse_for_lr)
+    plot_mse_for_different_lr(l_rates, epochs_num_for_lr, mse_for_lr, error_margin)
 
 
 def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations_num: int = 10):
@@ -41,7 +42,7 @@ def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
                               5 * np.power([10.] * len(powers[1:]), powers[1:])])
     l_rates = np.sort(l_rates)
-    weight_limit = np.array([0.1, 0.2, 0.5, 1.0])
+    weight_limit = np.array([0.1, 0.3, 0.5, 0.8, 1.0])
 
     dataset = get_dataset(noise_data_number=5)
     avg_epochs_numbers = []
@@ -64,13 +65,16 @@ def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations
     plot_results(l_rates, weight_limit, avg_epochs_numbers)
 
 
-def plot_mse_for_different_lr(learning_rates: np.ndarray, epochs_num_for_lr: List[int], mse_for_lr: List[List[float]]):
+def plot_mse_for_different_lr(learning_rates: np.ndarray, epochs_num_for_lr: List[int], mse_for_lr: List[List[float]],
+                              error_margin: float):
     for lr, epoch_num, mean_squared_errors in zip(learning_rates, epochs_num_for_lr, mse_for_lr):
-        plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, 'o-', label=r'$lr={0}$'.format(lr))
+        plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '.--', label=r'$lr={0}$'.format(lr))
 
+    plt.plot(np.arange(1, max(epochs_num_for_lr) + 1), [error_margin] * max(epochs_num_for_lr), '--', lw=1.1, c='grey')
     plt.xlabel('Epoka')
     plt.ylabel('MSE')
-    plt.legend()
+    plt.legend(loc=1)
+    plt.tight_layout()
     plt.grid()
     plt.show()
 
@@ -85,6 +89,7 @@ def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num
     plt.semilogx()
     plt.xlabel('Współczynnik uczenia')
     plt.ylabel('Liczba epok')
+    plt.tight_layout()
     plt.show()
 
 
