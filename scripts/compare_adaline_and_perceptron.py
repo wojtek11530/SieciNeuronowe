@@ -14,12 +14,12 @@ from models.perceptron import Perceptron
 def compare_models():
     simulations_number = 30
 
-    weight_limit = 0.4
+    weight_limit = 0.5
     error_margin = 0.3
 
-    dataset = get_dataset(noise_data_number=0, unipolar=False)
+    dataset = get_dataset(noise_data_number=5, unipolar=False)
 
-    powers = np.arange(-1, -4, -1)
+    powers = np.arange(-2, -5, -1)
     learning_rates = np.concatenate([np.power([10.] * len(powers), powers),
                                      5 * np.power([10.] * len(powers[1:]), powers[1:])])
     learning_rates = np.sort(learning_rates)[1:]
@@ -73,8 +73,9 @@ def plot_result(learning_rates: np.ndarray,
                                       label='Adaline')]
     plt.legend(handles=legend_elements)
     plt.grid(axis='y')
-    plt.xlabel('Współczynnik uczenia')
+    plt.xlabel(r'Współczynnik uczenia $\alpha$')
     plt.ylabel('Liczba epok')
+    plt.tight_layout()
     plt.show()
 
 
