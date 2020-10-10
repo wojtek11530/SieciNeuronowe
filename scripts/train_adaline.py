@@ -19,13 +19,14 @@ def run_training():
                                                  error_margin=error_margin,
                                                  max_epoch=max_epoch,
                                                  unipolar=False, plot_epoch=False)
-    plot_mean_square_errors(epoch_num, mean_squared_errors)
+    plot_mean_square_errors(epoch_num, mean_squared_errors, error_margin)
 
     evaluate_model(adaline, get_dataset(noise_data_number=2, unipolar=False), unipolar=False)
 
 
-def plot_mean_square_errors(epoch_num, mean_squared_errors):
-    plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '.--')
+def plot_mean_square_errors(epoch_num, mean_squared_errors, error_margin):
+    plt.plot(np.arange(1, epoch_num + 1), mean_squared_errors, '*--')
+    plt.plot(np.arange(1, epoch_num + 1), [error_margin] * epoch_num, '--', lw=1.1, c='grey')
     plt.xlabel('Epoka')
     plt.ylabel('MSE')
     plt.grid()
