@@ -10,38 +10,34 @@ from models.perceptron import Perceptron
 
 
 def analyze(simulations_num: int = 10):
-    powers = np.arange(-1, -5, -1)
-    w_limit = 0.5
-
-    l_rates = np.concatenate([[0.9, 0.5, 0.25], np.power([10.] * len(powers), powers),
-                              5 * np.power([10.] * len(powers[1:]), powers[1:])])
-    l_rates = np.sort(l_rates)[1:]
+    lr = 0.01
+    weight_limit = np.array([0.1, 0.3, 0.5, 0.8, 1.0])
 
     dataset = get_dataset(noise_data_number=5, unipolar=True)
-
     epochs_numbers = []
-    for lr in l_rates:
+    for w_limit in weight_limit:
 
-        lr_epochs_num = []
+        w_epochs_num = []
         for _ in range(simulations_num):
             perceptron = Perceptron(2, weight_limit=w_limit, activation_fn=unipolar_activation)
             epoch_num, _ = train_model(perceptron, dataset, lr, verbose=False)
-            lr_epochs_num.append(epoch_num)
+            w_epochs_num.append(epoch_num)
 
-        epochs_numbers.append(lr_epochs_num)
+        epochs_numbers.append(w_epochs_num)
 
-    plot_results(l_rates, epochs_numbers)
+    plot_results(weight_limit, epochs_numbers)
 
 
-def plot_results(learning_rates: np.ndarray,
+def plot_results(weight_limit: np.ndarray,
                  epochs_numbers: List[List[float]]) -> None:
     plt.boxplot(epochs_numbers)
 
-    positions = list(1 + np.arange(len(learning_rates)))
-    plt.xticks(positions, learning_rates)
+    positions = list(1 + np.arange(len(weight_limit)))
+    plt.xticks(positions,
+               [r'$(${0}$,${1}$)$'.format(-weigth, weigth) for weigth in weight_limit])
 
     plt.grid(axis='y')
-    plt.xlabel(r'Współczynnik uczenia $\alpha$')
+    plt.xlabel(r'Wagi początkowe - przedział')
     plt.ylabel('Liczba epok')
     plt.show()
 
