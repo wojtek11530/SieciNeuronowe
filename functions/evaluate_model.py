@@ -31,15 +31,19 @@ def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: b
             color = 'b' if y == 1 else 'r'
             plt.plot(x1, x2, 'o', markersize=2, color=color)
 
+    plt.plot([], 'o', markersize=2, color='b', label=r'$\hat{y}=1.0$')
+    plt.plot([], 'o', markersize=2, color='r', label=r'$\hat{{y}}={0}$'.format((zero_val)))
     x1 = np.linspace(zero_val, 1, 100)
     if type(model) in [Perceptron, Adaline]:
         plot_separating_lin(model, x1)
     plt.xlabel(r'$x_1$')
     plt.ylabel(r'$x_2$')
     plt.title(title)
-    plt.axis('equal')
+    # plt.axis('equal')
     plt.xlim(zero_val - step, 1 + step)
     plt.ylim(zero_val - step, 1 + step)
+    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    plt.tight_layout()
     if show:
         plt.show()
 
