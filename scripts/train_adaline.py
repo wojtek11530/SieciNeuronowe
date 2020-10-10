@@ -3,14 +3,14 @@ import numpy as np
 
 from dataset.and_dataset import get_dataset
 from functions.evaluate_model import evaluate_model
-from functions.tran_model import train_model
+from functions.train_model import train_model
 from models.adaline import Adaline
 
 
 def run_training():
     weight_limit = 1.0
     learning_rate = 0.01
-    error_margin = 0.3
+    error_margin = 0.2
     max_epoch = 500
     dataset = get_dataset(noise_data_number=20, unipolar=False)
 

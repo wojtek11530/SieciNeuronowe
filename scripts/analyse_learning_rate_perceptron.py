@@ -5,7 +5,7 @@ import numpy as np
 
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import unipolar_activation
-from functions.tran_model import train_model
+from functions.train_model import train_model
 from models.perceptron import Perceptron
 
 

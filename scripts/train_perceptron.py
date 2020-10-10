@@ -1,7 +1,7 @@
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import bipolar_activation, unipolar_activation
 from functions.evaluate_model import evaluate_model
-from functions.tran_model import train_model
+from functions.train_model import train_model
 from models.perceptron import Perceptron
 
 

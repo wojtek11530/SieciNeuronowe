@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
-from functions.tran_model import train_model
+from functions.train_model import train_model
 from models.adaline import Adaline
 
 
@@ -17,7 +17,7 @@ def analyze_mse_for_different_learning_rates():
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
                               5 * np.power([10.] * len(powers[1:]), powers[1:])])
     l_rates = np.sort(l_rates)
-    dataset = get_dataset(noise_data_number=5)
+    dataset = get_dataset(noise_data_number=5, unipolar=False)
     mse_for_lr = []
     epochs_num_for_lr = []
     for lr in l_rates:
@@ -36,7 +36,7 @@ def analyze_mse_for_different_learning_rates():
 
 def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations_num: int = 10):
     max_epoch = 1000
-    error_margin = 0.2
+    error_margin = 0.3
 
     powers = np.arange(-2, -6, -1)
     l_rates = np.concatenate([np.power([10.] * len(powers), powers),
@@ -44,7 +44,7 @@ def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations
     l_rates = np.sort(l_rates)
     weight_limit = np.array([0.1, 0.3, 0.5, 0.8, 1.0])
 
-    dataset = get_dataset(noise_data_number=5)
+    dataset = get_dataset(noise_data_number=5, unipolar=False)
     avg_epochs_numbers = []
     for w_limit in weight_limit:
         avg_epochs_numbers_for_weight = []
@@ -95,4 +95,4 @@ def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num
 
 if __name__ == '__main__':
     analyze_mse_for_different_learning_rates()
-    analyze_epochs_number_for_various_learning_rate_and_init_weights(25)
+    analyze_epochs_number_for_various_learning_rate_and_init_weights(30)

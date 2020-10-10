@@ -19,6 +19,9 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
             print(f'Epoch {epoch_num}', end='')
             print(f',\t {str(model)}')
 
+        if epoch_num > 100:
+            a = 2
+            pass
         continue_training, error = train_one_epoch(model, dataset, lr, error_margin)
         if verbose and error:
             print(f'Error: {str(error)}')

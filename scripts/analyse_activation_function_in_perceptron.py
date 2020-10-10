@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import bipolar_activation, unipolar_activation
-from functions.tran_model import train_model
+from functions.train_model import train_model
 from models.perceptron import Perceptron
 
 unipolar_dataset = get_dataset(noise_data_number=5, unipolar=True)
