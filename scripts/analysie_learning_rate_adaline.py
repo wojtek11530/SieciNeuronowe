@@ -95,4 +95,4 @@ def plot_results(learning_rates: np.ndarray, weight_limit: np.ndarray, epoch_num
 
 if __name__ == '__main__':
     analyze_mse_for_different_learning_rates()
-    analyze_epochs_number_for_various_learning_rate_and_init_weights(30)
+    analyze_epochs_number_for_various_learning_rate_and_init_weights(10)
