@@ -21,6 +21,6 @@ def run_training(weight_limit: float, unipolar: bool = True):
 
 
 if __name__ == '__main__':
-    weight_lim = 0.1
+    weight_lim = 1.0
     run_training(weight_lim, unipolar=True)
     run_training(weight_lim, unipolar=False)

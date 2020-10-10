@@ -10,7 +10,7 @@ bipolar_dataset = get_dataset(noise_data_number=5, unipolar=False)
 
 simulations_num = 50
 lr = 0.01
-weight_limit = 0.7
+weight_limit = 0.5
 
 unipolar_epochs_num = []
 bipolar_epochs_num = []
@@ -25,6 +25,6 @@ for i in range(simulations_num):
     bipolar_epochs_num.append(epoch_num)
 
 plt.boxplot([unipolar_epochs_num, bipolar_epochs_num], labels=['Aktywacja unipolarna', 'Aktywacja bipolarna'])
-plt.title('Perceptron - rozkład liczby epok, liczba_symulacji=' + str(simulations_num))
 plt.ylabel('Liczba epok')
+plt.grid(axis='y')
 plt.show()
