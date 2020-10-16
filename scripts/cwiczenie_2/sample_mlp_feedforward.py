@@ -10,9 +10,10 @@ mlp_model = MLP(
     init_parameters_sd=1
 )
 print(mlp_model)
+print()
 
 for x, y in training_data:
     y_hat = mlp_model(x)
     print(f'y_real:\n{y}')
-    print(f'y_hat:\n{y_hat}')
+    print(f'\ny_hat:\n{y_hat}')
     break
