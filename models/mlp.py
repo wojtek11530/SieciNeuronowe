@@ -1,3 +1,5 @@
+import pickle as pkl
+
 from typing import Optional, Tuple, List, Callable
 
 import numpy as np
@@ -32,6 +34,18 @@ class MLP(BaseModel):
     def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
             -> Tuple[bool, Optional[float]]:
         pass
+
+    def save_model(self, file_name: str) -> None:
+        model_dict = {'weights': self.weights, 'biases': self.biases, 'act_fn': self.activation_functions}
+        with open(file_name, 'wb') as handle:
+            pkl.dump(model_dict, handle, protocol=pkl.HIGHEST_PROTOCOL)
+
+    def load_model(self, file_name: str) -> None:
+        with open(file_name, 'rb') as handle:
+            model_dict = pkl.load(handle)
+            self.weights = model_dict['weights']
+            self.biases = model_dict['biases']
+            self.activation_functions = model_dict['act_fn']
 
     def __str__(self):
         dims = []
