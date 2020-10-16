@@ -34,4 +34,12 @@ class MLP(BaseModel):
         pass
 
     def __str__(self):
-        return 'MLP model'
+        dims = []
+        for weight in self.weights:
+            dims.append(str(weight.shape[1]))
+            dims.append(str(weight.shape[0]))
+
+        dims = dims[:-2] + [dims[-1]]
+        string = 'MLP model:\n - dims: ' + ', '.join(dims) + '\n - activation_functions: ' \
+                 + ', '.join(str(fn) for fn in self.activation_functions)
+        return string

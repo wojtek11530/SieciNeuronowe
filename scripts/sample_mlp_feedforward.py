@@ -9,6 +9,7 @@ mlp_model = MLP(
     activation_functions=[sigmoid, softmax],
     init_parameters_sd=1
 )
+print(mlp_model)
 
 for x, y in training_data:
     y_hat = mlp_model(x)
