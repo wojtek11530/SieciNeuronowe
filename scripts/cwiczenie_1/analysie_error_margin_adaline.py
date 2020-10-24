@@ -20,9 +20,8 @@ def analyze(simulations_num: int = 10):
 
         err_marg_epochs_num = []
         for _ in range(simulations_num):
-            adaline = Adaline(2, weight_limit=weight_limit)
+            adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
             epoch_num, mean_squared_errors = train_model(adaline, dataset, learning_rate,
-                                                         error_margin=error_margin,
                                                          max_epoch=max_epoch,
                                                          unipolar=False, plot_epoch=False)
             err_marg_epochs_num.append(epoch_num)

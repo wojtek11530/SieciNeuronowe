@@ -9,7 +9,7 @@ from utils.random import get_random_float
 
 
 class Adaline(BaseModel):
-    def __init__(self, input_dim: int, weight_limit: float = 1):
+    def __init__(self, input_dim: int, weight_limit: float = 1, error_margin: float = 0.4):
         if weight_limit > 1:
             weight_limit = 1
 
@@ -19,16 +19,18 @@ class Adaline(BaseModel):
         self.loss_fn = diff_loss_function
         self.activation_fn = bipolar_activation
 
+        self.error_margin = error_margin
+
     def forward(self, x: np.ndarray) -> np.ndarray:
         z = np.dot(x, self.weights) + self.bias
         return self.activation_fn(z)
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) \
             -> Tuple[bool, float]:
         z = np.dot(x_set, self.weights) + self.bias
         deltas = self.loss_fn(y_set, z)
         mean_squared_error = float(np.mean(np.power(deltas, 2)))
-        if mean_squared_error > error_margin:
+        if mean_squared_error > self.error_margin:
             for x, delta in zip(x_set, deltas):
                 self._update_weight_for_one_input(x, delta, lr)
             return True, mean_squared_error

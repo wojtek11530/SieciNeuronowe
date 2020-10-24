@@ -22,9 +22,8 @@ def analyze_mse_for_different_learning_rates():
     epochs_num_for_lr = []
     for lr in l_rates:
         np.random.seed(42)
-        adaline = Adaline(2, weight_limit=weight_limit)
+        adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
         epoch_num, mean_squared_errors = train_model(adaline, dataset, lr,
-                                                     error_margin=error_margin,
                                                      max_epoch=max_epoch,
                                                      unipolar=False,
                                                      plot_epoch=False)
@@ -51,9 +50,8 @@ def analyze_epochs_number_for_various_learning_rate_and_init_weights(simulations
         for lr in l_rates:
             lr_epochs_num = []
             for _ in range(simulations_num):
-                adaline = Adaline(2, weight_limit=w_limit)
-                epoch_num, mse = train_model(adaline, dataset, lr, max_epoch=max_epoch, verbose=False,
-                                             error_margin=error_margin)
+                adaline = Adaline(2, weight_limit=w_limit, error_margin=error_margin)
+                epoch_num, mse = train_model(adaline, dataset, lr, max_epoch=max_epoch, verbose=False)
                 print(f'MSE: {mse[-1]}')
                 lr_epochs_num.append(epoch_num)
 

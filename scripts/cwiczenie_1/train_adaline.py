@@ -10,13 +10,12 @@ from models.adaline import Adaline
 def run_training():
     weight_limit = 1.0
     learning_rate = 0.01
-    error_margin = 0.2
+    error_margin = 0.3
     max_epoch = 500
     dataset = get_dataset(noise_data_number=20, unipolar=False)
 
-    adaline = Adaline(2, weight_limit=weight_limit)
+    adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
     epoch_num, mean_squared_errors = train_model(adaline, dataset, learning_rate,
-                                                 error_margin=error_margin,
                                                  max_epoch=max_epoch,
                                                  unipolar=False, plot_epoch=False)
     plot_mean_square_errors(epoch_num, mean_squared_errors, error_margin)

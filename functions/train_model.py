@@ -6,7 +6,7 @@ from functions.evaluate_model import plot_plane
 from models.base import BaseModel
 
 
-def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: float, error_margin: float = 0,
+def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: float,
                 max_epoch: Optional[int] = None, verbose: bool = True, unipolar: bool = True,
                 plot_epoch: bool = False) \
         -> Tuple[int, List[Optional[float]]]:
@@ -19,10 +19,7 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
             print(f'Epoch {epoch_num}', end='')
             print(f',\t {str(model)}')
 
-        if epoch_num > 100:
-            a = 2
-            pass
-        continue_training, error = train_one_epoch(model, dataset, lr, error_margin)
+        continue_training, error = train_one_epoch(model, dataset, lr)
         if verbose and error:
             print(f'Error: {str(error)}')
         errors.append(error)
@@ -41,8 +38,8 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
     return epoch_num, errors
 
 
-def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float, error_margin: float) \
+def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float) \
         -> Tuple[bool, Optional[float]]:
     x_set, y_set = dataset
-    continue_training, error = model.update_weight(x_set, y_set, lr, error_margin)
+    continue_training, error = model.update_weight(x_set, y_set, lr)
     return continue_training, error

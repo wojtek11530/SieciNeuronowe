@@ -10,7 +10,7 @@ class BaseModel:
         pass
 
     @abstractmethod
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) \
             -> Tuple[bool, Optional[float]]:
         pass
 

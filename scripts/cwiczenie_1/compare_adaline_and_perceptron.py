@@ -37,8 +37,8 @@ def compare_models():
 
         lr_epochs_num = []
         for _ in range(simulations_number):
-            adaline = Adaline(2, weight_limit=weight_limit)
-            epoch_num, mse = train_model(adaline, dataset, lr, verbose=False, error_margin=error_margin)
+            adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
+            epoch_num, mse = train_model(adaline, dataset, lr, verbose=False)
             print(f'MSE: {mse[-1]}')
             lr_epochs_num.append(epoch_num)
 

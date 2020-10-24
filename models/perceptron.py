@@ -23,7 +23,7 @@ class Perceptron(BaseModel):
         z = np.dot(x, self.weights) + self.bias
         return self.activation_fn(z)
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float, error_margin: float) \
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) \
             -> Tuple[bool, Optional[float]]:
         any_weight_updated_in_epoch = False
         y_pred = self(x_set)
