@@ -14,14 +14,14 @@ def run_training():
 
     mlp_model = MLP(
         input_dim=784, output_dim=10, hidden_dims=[30],
-        activation_functions=[sigmoid, sigmoid],
+        activation_functions=[sigmoid],
         init_parameters_sd=1
     )
 
-    learning_rate = 1e-2
+    learning_rate = 1e-1
     print(mlp_model)
-    batch_size = 100
-    max_epochs = 2
+    batch_size = 50
+    max_epochs = 30
 
     training_epoch_num, training_losses, validation_losses, validation_accuracies = \
         train_model(mlp_model, x_train, y_train, lr=learning_rate, batch_size=batch_size, max_epochs=max_epochs,
