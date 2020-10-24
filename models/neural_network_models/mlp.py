@@ -7,10 +7,11 @@ import numpy as np
 from functions.activation_functions import sigmoid, softmax, tanh, relu, sigmoid_derivative, relu_derivative, \
     tanh_derivative
 from functions.loss_functions import cross_entropy_loss_with_softmax_derivative, cross_entropy
-from models.base import BaseModel
+
+from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
 
 
-class MLP(BaseModel):
+class MLP(NeuralNetworkBaseModel):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: List[int],
                  init_parameters_sd: float = 1.0,
 
@@ -52,12 +53,13 @@ class MLP(BaseModel):
         self.biases = [biases - lr / batch_size * biases_change
                        for biases, biases_change in zip(self.biases, total_biases_change)]
 
-        losses_after_update = self._calculate_losses(x_set, y_set)
+        y_pred = np.array([self.forward(x) for x in x_set])
+        losses_after_update = self.calculate_losses(y_pred, y_set)
         return True, float(np.mean(losses_after_update))
 
-    def _calculate_losses(self, x_set, y_set):
-        return np.array([cross_entropy(y_real, self.forward(x))
-                         for x, y_real in zip(x_set, y_set)])
+    def calculate_losses(self, y_pred: np.ndarray, y_real: np.ndarray) -> np.ndarray:
+        return np.array([cross_entropy(y_true, y_hat)
+                         for y_hat, y_true in zip(y_pred, y_real)])
 
     def _backpropagate(self, x: np.ndarray, y_real: np.ndarray) -> Tuple[List[np.ndarray], List[np.ndarray]]:
         sample_weights_change = [np.zeros(w.shape) for w in self.weights]

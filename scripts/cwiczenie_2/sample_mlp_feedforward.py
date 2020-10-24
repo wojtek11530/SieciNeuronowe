@@ -1,8 +1,6 @@
-import numpy as np
-
 from dataset.mnist_dataset import load_data_wrapper
-from functions.activation_functions import sigmoid, softmax
-from models.mlp import MLP
+from functions.activation_functions import sigmoid
+from models.neural_network_models.mlp import MLP
 
 x_train, y_train, x_val, y_val, x_test, y_test = load_data_wrapper()
 
