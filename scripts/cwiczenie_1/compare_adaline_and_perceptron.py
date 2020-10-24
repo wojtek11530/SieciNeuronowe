@@ -6,9 +6,9 @@ import numpy as np
 
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import bipolar_activation
-from functions.train_model import train_model
-from models.adaline import Adaline
-from models.perceptron import Perceptron
+from models.simple_models.train_model import train_model
+from models.simple_models.adaline import Adaline
+from models.simple_models.perceptron import Perceptron
 
 
 def compare_models():

@@ -1,14 +1,12 @@
-from typing import Tuple, Union
+from typing import Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-from models.adaline import Adaline
-from models.base import BaseModel
-from models.perceptron import Perceptron
+from models.simple_models.base_simple_model import BaseSimpleModel
 
 
-def evaluate_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], unipolar: bool = True):
+def evaluate_model(model: BaseSimpleModel, dataset: Tuple[np.ndarray, np.array], unipolar: bool = True):
     print('\nModel evaluation:')
     x_set, y_set = dataset
     y_pred = model(x_set)
@@ -18,7 +16,7 @@ def evaluate_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], unipo
     plot_plane(model, unipolar=unipolar)
 
 
-def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: bool = True):
+def plot_plane(model: BaseSimpleModel, show: bool = True, title: str = '', unipolar: bool = True):
     step = 0.05
     if unipolar:
         zero_val = 0.
@@ -33,9 +31,7 @@ def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: b
 
     plt.plot([], 'o', markersize=2, color='b', label=r'$\hat{y}=1.0$')
     plt.plot([], 'o', markersize=2, color='r', label=r'$\hat{{y}}={0}$'.format((zero_val)))
-    x1 = np.linspace(zero_val, 1, 100)
-    if type(model) in [Perceptron, Adaline]:
-        plot_separating_lin(model, x1)
+    plot_separating_lin(model, zero_val)
     plt.xlabel(r'$x_1$')
     plt.ylabel(r'$x_2$')
     plt.title(title)
@@ -48,7 +44,8 @@ def plot_plane(model: BaseModel, show: bool = True, title: str = '', unipolar: b
         plt.show()
 
 
-def plot_separating_lin(model: Union[Perceptron, Adaline], x1: np.ndarray):
+def plot_separating_lin(model: BaseSimpleModel, zero_val: float):
+    x1 = np.linspace(zero_val, 1, 100)
     w1 = model.weights[0]
     w2 = model.weights[1]
     b = model.bias

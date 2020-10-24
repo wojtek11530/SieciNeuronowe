@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
-from functions.evaluate_model import evaluate_model
-from functions.train_model import train_model
-from models.adaline import Adaline
+from models.simple_models.evaluate_model import evaluate_model
+from models.simple_models.train_model import train_model
+from models.simple_models.adaline import Adaline
 
 
 def run_training():
@@ -16,8 +16,7 @@ def run_training():
 
     adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
     epoch_num, mean_squared_errors = train_model(adaline, dataset, learning_rate,
-                                                 max_epoch=max_epoch,
-                                                 unipolar=False, plot_epoch=False)
+                                                 max_epoch=max_epoch)
     plot_mean_square_errors(epoch_num, mean_squared_errors, error_margin)
 
     evaluate_model(adaline, get_dataset(noise_data_number=2, unipolar=False), unipolar=False)

@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
-from functions.train_model import train_model
-from models.adaline import Adaline
+from models.simple_models.train_model import train_model
+from models.simple_models.adaline import Adaline
 
 
 def analyze(simulations_num: int = 10):
@@ -22,8 +22,7 @@ def analyze(simulations_num: int = 10):
         for _ in range(simulations_num):
             adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
             epoch_num, mean_squared_errors = train_model(adaline, dataset, learning_rate,
-                                                         max_epoch=max_epoch,
-                                                         unipolar=False, plot_epoch=False)
+                                                         max_epoch=max_epoch)
             err_marg_epochs_num.append(epoch_num)
 
         epochs_numbers.append(err_marg_epochs_num)
@@ -31,7 +30,7 @@ def analyze(simulations_num: int = 10):
     plot_results(error_margins, epochs_numbers)
 
 
-def plot_results(error_margins: np.ndarray,
+def plot_results(error_margins: List[float],
                  epochs_numbers: List[List[float]]) -> None:
     plt.boxplot(epochs_numbers)
 

@@ -2,13 +2,11 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 
-from functions.evaluate_model import plot_plane
-from models.base import BaseModel
+from models.simple_models.base_simple_model import BaseSimpleModel
 
 
-def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: float,
-                max_epoch: Optional[int] = None, verbose: bool = True, unipolar: bool = True,
-                plot_epoch: bool = False) \
+def train_model(model: BaseSimpleModel, dataset: Tuple[np.ndarray, np.array], lr: float,
+                max_epoch: Optional[int] = None, verbose: bool = True) \
         -> Tuple[int, List[Optional[float]]]:
     continue_training = True
     epoch_num = 1
@@ -24,9 +22,6 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
             print(f'Error: {str(error)}')
         errors.append(error)
 
-        if plot_epoch:
-            plot_plane(model, unipolar=unipolar, title='Epoch ' + str(epoch_num))
-
         if continue_training:
             epoch_num += 1
 
@@ -38,7 +33,7 @@ def train_model(model: BaseModel, dataset: Tuple[np.ndarray, np.array], lr: floa
     return epoch_num, errors
 
 
-def train_one_epoch(model: BaseModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float) \
+def train_one_epoch(model: BaseSimpleModel, dataset: Tuple[np.ndarray, np.ndarray], lr: float) \
         -> Tuple[bool, Optional[float]]:
     x_set, y_set = dataset
     continue_training, error = model.update_weight(x_set, y_set, lr)

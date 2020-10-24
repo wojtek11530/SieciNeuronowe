@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
-from functions.train_model import train_model
-from models.adaline import Adaline
+from models.simple_models.train_model import train_model
+from models.simple_models.adaline import Adaline
 
 
 def analyze_mse_for_different_learning_rates():
@@ -24,9 +24,7 @@ def analyze_mse_for_different_learning_rates():
         np.random.seed(42)
         adaline = Adaline(2, weight_limit=weight_limit, error_margin=error_margin)
         epoch_num, mean_squared_errors = train_model(adaline, dataset, lr,
-                                                     max_epoch=max_epoch,
-                                                     unipolar=False,
-                                                     plot_epoch=False)
+                                                     max_epoch=max_epoch)
         epochs_num_for_lr.append(epoch_num)
         mse_for_lr.append(mean_squared_errors)
 

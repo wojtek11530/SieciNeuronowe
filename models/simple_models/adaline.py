@@ -3,22 +3,12 @@ from typing import Tuple
 import numpy as np
 
 from functions.activation_functions import bipolar_activation
-from functions.loss_functions import diff_loss_function
-from models.base import BaseModel
-from utils.random import get_random_float
+from models.simple_models.base_simple_model import BaseSimpleModel
 
 
-class Adaline(BaseModel):
+class Adaline(BaseSimpleModel):
     def __init__(self, input_dim: int, weight_limit: float = 1, error_margin: float = 0.4):
-        if weight_limit > 1:
-            weight_limit = 1
-
-        self.weights = get_random_float(min_val=-weight_limit, max_val=weight_limit, shape=input_dim)
-        self.bias = get_random_float(min_val=-weight_limit, max_val=weight_limit)
-
-        self.loss_fn = diff_loss_function
-        self.activation_fn = bipolar_activation
-
+        super().__init__(input_dim, weight_limit, bipolar_activation)
         self.error_margin = error_margin
 
     def forward(self, x: np.ndarray) -> np.ndarray:
