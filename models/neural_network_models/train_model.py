@@ -1,5 +1,5 @@
 import sys
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 from tqdm import tqdm

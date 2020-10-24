@@ -1,8 +1,8 @@
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import bipolar_activation, unipolar_activation
 from models.simple_models.evaluate_model import evaluate_model
-from models.simple_models.train_model import train_model
 from models.simple_models.perceptron import Perceptron
+from models.simple_models.train_model import train_model
 
 
 def run_training(weight_limit: float, unipolar: bool = True):

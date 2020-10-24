@@ -8,9 +8,9 @@ and ``load_data_wrapper``.  In practice, ``load_data_wrapper`` is the
 function usually called by our neural network code.
 """
 
+import gzip
 import os
 import pickle
-import gzip
 
 import numpy as np
 

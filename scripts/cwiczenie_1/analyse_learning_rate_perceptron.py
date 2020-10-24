@@ -5,8 +5,8 @@ import numpy as np
 
 from dataset.and_dataset import get_dataset
 from functions.activation_functions import unipolar_activation
-from models.simple_models.train_model import train_model
 from models.simple_models.perceptron import Perceptron
+from models.simple_models.train_model import train_model
 
 
 def analyze(simulations_num: int = 10):
@@ -34,7 +34,7 @@ def analyze(simulations_num: int = 10):
 
 
 def plot_results(learning_rates: np.ndarray,
-                 epochs_numbers: List[List[float]]) -> None:
+                 epochs_numbers: List[List[int]]) -> None:
     plt.boxplot(epochs_numbers)
 
     positions = list(1 + np.arange(len(learning_rates)))

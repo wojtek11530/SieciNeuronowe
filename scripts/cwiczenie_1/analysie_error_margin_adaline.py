@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
-from models.simple_models.train_model import train_model
 from models.simple_models.adaline import Adaline
+from models.simple_models.train_model import train_model
 
 
 def analyze(simulations_num: int = 10):
@@ -31,7 +31,7 @@ def analyze(simulations_num: int = 10):
 
 
 def plot_results(error_margins: List[float],
-                 epochs_numbers: List[List[float]]) -> None:
+                 epochs_numbers: List[List[int]]) -> None:
     plt.boxplot(epochs_numbers)
 
     positions = list(1 + np.arange(len(error_margins)))

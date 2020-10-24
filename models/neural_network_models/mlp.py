@@ -1,21 +1,17 @@
 import pickle as pkl
-
-from typing import Optional, Tuple, List, Union
+from typing import Callable, List, Optional, Tuple
 
 import numpy as np
 
-from functions.activation_functions import sigmoid, softmax, tanh, relu, sigmoid_derivative, relu_derivative, \
-    tanh_derivative
-from functions.loss_functions import cross_entropy_loss_with_softmax_derivative, cross_entropy
-
+from functions.activation_functions import relu_derivative, sigmoid, sigmoid_derivative, softmax, tanh, tanh_derivative
+from functions.loss_functions import cross_entropy, cross_entropy_loss_with_softmax_derivative
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
 
 
 class MLP(NeuralNetworkBaseModel):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: List[int],
                  init_parameters_sd: float = 1.0,
-
-                 activation_functions: Optional[List[Union[sigmoid, softmax, tanh, relu]]] = None):
+                 activation_functions: Optional[List[Callable]] = None):
         self.input_dim = input_dim
         sizes = [input_dim] + hidden_dims + [output_dim]
 

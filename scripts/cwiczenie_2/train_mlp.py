@@ -19,4 +19,3 @@ max_epochs = 4
 
 train_model(mlp_model, x_train, y_train, lr=learning_rate, batch_size=batch_size, max_epochs=max_epochs,
             x_val=x_val, y_val=y_val)
-

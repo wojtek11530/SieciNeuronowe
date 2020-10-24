@@ -2,9 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.and_dataset import get_dataset
+from models.simple_models.adaline import Adaline
 from models.simple_models.evaluate_model import evaluate_model
 from models.simple_models.train_model import train_model
-from models.simple_models.adaline import Adaline
 
 
 def run_training():
