@@ -2,6 +2,7 @@ import sys
 from typing import Optional, Tuple, List
 
 import numpy as np
+from matplotlib import pyplot as plt
 from tqdm import tqdm
 
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
@@ -9,7 +10,8 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 
 def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.ndarray,
                 lr: float, batch_size: int, max_epochs: int,
-                x_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None) \
+                x_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None,
+                plot: bool = True) \
         -> Tuple[int, List[float], List[float], List[float]]:
     training_losses = []
     validation_losses = []
@@ -40,6 +42,10 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
             validation_losses.append(avg_val_loss)
             validation_accuracies.append(accuracy)
 
+    if plot:
+        plot_losses_during_training(overall_epoch_num, training_losses, validation_losses)
+        plot_accuracies(overall_epoch_num, validation_accuracies)
+
     return overall_epoch_num, training_losses, validation_losses, validation_accuracies
 
 
@@ -52,3 +58,25 @@ def validate_epoch(model: NeuralNetworkBaseModel, x_val: np.ndarray, y_val: np.n
     accuracy = sum(y_label == y_pred_label) / len(y_val)
     print(f'Avg_val_loss={avg_val_loss:.4f}, Val_accuracy={accuracy:.4f}')
     return avg_val_loss, accuracy
+
+
+def plot_losses_during_training(epoch_num: int, training_losses: List[float], validation_losses: List[float]):
+    epochs = np.arange(1, epoch_num + 1)
+    plt.plot(epochs, training_losses, '*--', c='blue', label='zb. treningowy')
+    if len(validation_losses) != 0:
+        plt.plot(epochs, validation_losses, '*--', c='orange', label='zb. walidacyjny')
+    plt.xlabel('Epoka')
+    plt.ylabel('Średnia funkcja straty')
+    plt.legend()
+    plt.grid(axis='y')
+    plt.show()
+
+
+def plot_accuracies(epoch_num: int, validation_accuracies: List[float]):
+    epochs = np.arange(1, epoch_num + 1)
+    plt.plot(epochs, validation_accuracies, '*--', label='dokładność')
+    plt.legend()
+    plt.xlabel('Epoka')
+    plt.ylabel('Dokładność')
+    plt.grid(axis='y')
+    plt.show()
