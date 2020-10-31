@@ -21,7 +21,7 @@ def analyze_learning_rates():
     batch_size = 50
     weight_sd = 1.0
 
-    learning_rates = [2e-1, 1e-1, 1e-2, 1e-3]
+    learning_rates = [5e-1, 2e-1, 1e-1, 1e-2, 1e-3]
     training_data_dictionary = {}
 
     for lr in learning_rates:
@@ -59,10 +59,11 @@ def analyze_learning_rates():
 
     plot_losses_results(training_data_dictionary)
     plot_accuracies_results(training_data_dictionary)
+    plot_accuracies_boxplot(training_data_dictionary)
 
 
 def analyze_learning_rates_from_file():
-    file_name = 'learning_rates_analysis_data_[0.2, 0.1, 0.01, 0.001]_10-30-2020_16.32.pkl'
+    file_name = 'learning_rates_analysis_data_[0.5, 0.2, 0.1, 0.01, 0.001]_10-31-2020_15.21.pkl'
     with open(file_name, 'rb') as handle:
         training_data_dictionary = pkl.load(handle)
         plot_losses_results(training_data_dictionary)
@@ -109,7 +110,7 @@ def plot_accuracies_results(training_data_dictionary: Dict[float, Dict[str, Unio
     plt.show()
 
 
-def plot_accuracies_boxplot(training_data_dictionary: Dict[int, Dict[str, Union[int, List[float]]]]):
+def plot_accuracies_boxplot(training_data_dictionary: Dict[float, Dict[str, Union[int, List[float]]]]):
     last_epoch_accuracies = [values_dict['val_acc'][-1] for hidden_neuron_num, values_dict in
                              training_data_dictionary.items()]
     lrs = training_data_dictionary.keys()
