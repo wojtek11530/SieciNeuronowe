@@ -1,5 +1,5 @@
 import sys
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -49,7 +49,7 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
                 min_ind = validation_losses.index(min_loss)
                 if len(validation_losses[min_ind + 1:]) > patience:
                     overall_epoch_num = epoch_num + 1
-                    model_parameters.append(model.set_model_parameters_from_dict(model_parameters[min_ind]))
+                    model.set_model_parameters_from_dict(model_parameters[min_ind])
                     break
 
     if plot:

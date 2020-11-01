@@ -3,10 +3,9 @@ import sys
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
 from matplotlib import pyplot as plt
-from tqdm import tqdm
 from sklearn.metrics import classification_report, confusion_matrix
+from tqdm import tqdm
 
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
 
@@ -14,7 +13,7 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 def evaluate_model(model: NeuralNetworkBaseModel, x_test: np.ndarray, y_test: np.ndarray):
     print('\nModel evaluation:')
     y_label = np.argmax(y_test, axis=1).flatten()
-    y_pred = np.array([model(x) for x in tqdm(x_test, desc=f'Model evaluation', file=sys.stdout)])
+    y_pred = np.array([model(x) for x in tqdm(x_test, desc='Model evaluation', file=sys.stdout)])
     y_pred_label = np.argmax(y_pred, axis=1).flatten()
     accuracy = sum(y_label == y_pred_label) / len(y_test)
     print(f'Aaccuracy={accuracy:.4f}')

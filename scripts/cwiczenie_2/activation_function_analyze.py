@@ -1,13 +1,12 @@
 import pickle as pkl
 from datetime import datetime
-
-from typing import Dict, Union, List
+from typing import Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
 
 from dataset.mnist_dataset import load_data_wrapper
-from functions.activation_functions import sigmoid, relu
+from functions.activation_functions import relu, sigmoid
 from models.neural_network_models.mlp import MLP
 from models.neural_network_models.train_model import train_model
 
@@ -73,7 +72,7 @@ def analyze_activation_functions_from_file():
         plot_accuracies_boxplot(training_data_dictionary)
 
 
-def plot_losses_results(training_data_dictionary: Dict[str, Dict[str, Union[int, List[float]]]]):
+def plot_losses_results(training_data_dictionary: Dict[str, Dict]):
     plt.figure(figsize=(5, 6))
     for act_fn_name, values_dict in training_data_dictionary.items():
         epoch_num = values_dict['epochs'][0]
@@ -94,7 +93,7 @@ def plot_losses_results(training_data_dictionary: Dict[str, Dict[str, Union[int,
     plt.show()
 
 
-def plot_accuracies_results(training_data_dictionary: Dict[str, Dict[str, Union[int, List[float]]]]):
+def plot_accuracies_results(training_data_dictionary: Dict[str, Dict]):
     plt.figure(figsize=(5, 6))
     for act_fn_name, values_dict in training_data_dictionary.items():
         epoch_num = values_dict['epochs'][0]
@@ -111,7 +110,7 @@ def plot_accuracies_results(training_data_dictionary: Dict[str, Dict[str, Union[
     plt.show()
 
 
-def plot_accuracies_boxplot(training_data_dictionary: Dict[int, Dict[str, Union[int, List[float]]]]):
+def plot_accuracies_boxplot(training_data_dictionary: Dict[str, Dict]):
     last_epoch_accuracies = [values_dict['val_acc'][-1] for hidden_neuron_num, values_dict in
                              training_data_dictionary.items()]
     act_functions_names = training_data_dictionary.keys()

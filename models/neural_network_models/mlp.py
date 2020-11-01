@@ -1,5 +1,5 @@
 import pickle as pkl
-from typing import Callable, List, Optional, Tuple, Dict
+from typing import Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 
