@@ -13,10 +13,10 @@ def run_training():
         init_parameters_sd=1
     )
 
-    learning_rate = 1e-1
+    learning_rate = 1e-2
     print(mlp_model)
     batch_size = 50
-    max_epochs = 4
+    max_epochs = 8
 
     train_model(mlp_model, x_train, y_train, lr=learning_rate, batch_size=batch_size, max_epochs=max_epochs,
                 x_val=x_val, y_val=y_val, plot=True)

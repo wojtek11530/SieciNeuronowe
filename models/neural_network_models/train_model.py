@@ -74,8 +74,7 @@ def plot_losses_during_training(epoch_num: int, training_losses: List[float], va
 
 def plot_accuracies(epoch_num: int, validation_accuracies: List[float]):
     epochs = np.arange(1, epoch_num + 1)
-    plt.plot(epochs, validation_accuracies, '*--', label='dokładność')
-    plt.legend()
+    plt.plot(epochs, validation_accuracies, '*--')
     plt.xlabel('Epoka')
     plt.ylabel('Dokładność')
     plt.grid(axis='y')
