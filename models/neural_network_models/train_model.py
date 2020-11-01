@@ -11,7 +11,7 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.ndarray,
                 lr: float, batch_size: int, max_epochs: int,
                 x_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None,
-                plot: bool = True) \
+                plot: bool = True, early_stop: bool = False, patience: int = 0) \
         -> Tuple[int, List[float], List[float], List[float]]:
     training_losses = []
     validation_losses = []
@@ -41,6 +41,13 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
             avg_val_loss, accuracy = validate_epoch(model, x_val, y_val, epoch_num)
             validation_losses.append(avg_val_loss)
             validation_accuracies.append(accuracy)
+
+            if early_stop:
+                min_loss = min(validation_losses)
+                min_ind = validation_losses.index(min_loss)
+                if len(validation_losses[min_ind + 1:]) > patience:
+                    overall_epoch_num = epoch_num + 1
+                    break
 
     if plot:
         plot_losses_during_training(overall_epoch_num, training_losses, validation_losses)
