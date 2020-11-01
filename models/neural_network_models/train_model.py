@@ -16,6 +16,7 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
     training_losses = []
     validation_losses = []
     validation_accuracies = []
+    model_parameters = []
 
     overall_epoch_num = max_epochs
     for epoch_num in range(max_epochs):
@@ -41,12 +42,14 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
             avg_val_loss, accuracy = validate_epoch(model, x_val, y_val, epoch_num)
             validation_losses.append(avg_val_loss)
             validation_accuracies.append(accuracy)
+            model_parameters.append(model.get_model_parameters_as_dict())
 
             if early_stop:
                 min_loss = min(validation_losses)
                 min_ind = validation_losses.index(min_loss)
                 if len(validation_losses[min_ind + 1:]) > patience:
                     overall_epoch_num = epoch_num + 1
+                    model_parameters.append(model.set_model_parameters_from_dict(model_parameters[min_ind]))
                     break
 
     if plot:

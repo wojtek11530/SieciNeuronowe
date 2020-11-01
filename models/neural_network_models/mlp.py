@@ -1,5 +1,5 @@
 import pickle as pkl
-from typing import Callable, List, Optional, Tuple
+from typing import Callable, List, Optional, Tuple, Dict
 
 import numpy as np
 
@@ -97,16 +97,23 @@ class MLP(NeuralNetworkBaseModel):
         return activations, zs
 
     def save_model(self, file_name: str) -> None:
-        model_dict = {'weights': self.weights, 'biases': self.biases, 'act_fn': self.activation_functions}
+        model_dict = self.get_model_parameters_as_dict()
         with open(file_name, 'wb') as handle:
             pkl.dump(model_dict, handle, protocol=pkl.HIGHEST_PROTOCOL)
+
+    def get_model_parameters_as_dict(self) -> Dict:
+        model_dict = {'weights': self.weights, 'biases': self.biases, 'act_fn': self.activation_functions}
+        return model_dict
 
     def load_model(self, file_name: str) -> None:
         with open(file_name, 'rb') as handle:
             model_dict = pkl.load(handle)
-            self.weights = model_dict['weights']
-            self.biases = model_dict['biases']
-            self.activation_functions = model_dict['act_fn']
+            self.set_model_parameters_from_dict(model_dict)
+
+    def set_model_parameters_from_dict(self, model_dict: Dict) -> None:
+        self.weights = model_dict['weights']
+        self.biases = model_dict['biases']
+        self.activation_functions = model_dict['act_fn']
 
     def __str__(self):
         dims = []
