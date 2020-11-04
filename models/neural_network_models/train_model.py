@@ -1,5 +1,5 @@
 import sys
-from typing import Optional, Tuple, List
+from typing import List, Optional, Tuple
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -11,11 +11,12 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.ndarray,
                 lr: float, batch_size: int, max_epochs: int,
                 x_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None,
-                plot: bool = True) \
+                plot: bool = True, early_stop: bool = False, patience: int = 0) \
         -> Tuple[int, List[float], List[float], List[float]]:
     training_losses = []
     validation_losses = []
     validation_accuracies = []
+    model_parameters = []
 
     overall_epoch_num = max_epochs
     for epoch_num in range(max_epochs):
@@ -41,6 +42,15 @@ def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.
             avg_val_loss, accuracy = validate_epoch(model, x_val, y_val, epoch_num)
             validation_losses.append(avg_val_loss)
             validation_accuracies.append(accuracy)
+            model_parameters.append(model.get_model_parameters_as_dict())
+
+            if early_stop:
+                min_loss = min(validation_losses)
+                min_ind = validation_losses.index(min_loss)
+                if len(validation_losses[min_ind + 1:]) > patience:
+                    overall_epoch_num = epoch_num + 1
+                    model.set_model_parameters_from_dict(model_parameters[min_ind])
+                    break
 
     if plot:
         plot_losses_during_training(overall_epoch_num, training_losses, validation_losses)
@@ -74,8 +84,7 @@ def plot_losses_during_training(epoch_num: int, training_losses: List[float], va
 
 def plot_accuracies(epoch_num: int, validation_accuracies: List[float]):
     epochs = np.arange(1, epoch_num + 1)
-    plt.plot(epochs, validation_accuracies, '*--', label='dokładność')
-    plt.legend()
+    plt.plot(epochs, validation_accuracies, '*--')
     plt.xlabel('Epoka')
     plt.ylabel('Dokładność')
     plt.grid(axis='y')

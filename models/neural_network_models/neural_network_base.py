@@ -2,6 +2,7 @@ from abc import abstractmethod
 from typing import Optional, Tuple
 
 import numpy as np
+from mypy.dmypy_server import Dict
 
 from models.base import BaseModel
 
@@ -18,6 +19,14 @@ class NeuralNetworkBaseModel(BaseModel):
 
     @abstractmethod
     def calculate_losses(self, y_pred: np.ndarray, y_real: np.ndarray) -> np.ndarray:
+        pass
+
+    @abstractmethod
+    def get_model_parameters_as_dict(self) -> Dict:
+        pass
+
+    @abstractmethod
+    def set_model_parameters_from_dict(self, model_dict: Dict) -> None:
         pass
 
     @abstractmethod
