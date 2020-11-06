@@ -6,12 +6,15 @@ import numpy as np
 from functions.activation_functions import relu_derivative, sigmoid, sigmoid_derivative, softmax, tanh, tanh_derivative
 from functions.loss_functions import cross_entropy, cross_entropy_loss_with_softmax_derivative
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
+from optimizers.base_optimizer import Optimizer
+from optimizers.sgd import SGD
 
 
 class MLP(NeuralNetworkBaseModel):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: List[int],
                  init_parameters_sd: float = 1.0,
-                 activation_functions: Optional[List[Callable]] = None):
+                 activation_functions: Optional[List[Callable]] = None,
+                 optimizer: Optimizer = SGD()):
         self.input_dim = input_dim
         sizes = [input_dim] + hidden_dims + [output_dim]
 
@@ -23,6 +26,9 @@ class MLP(NeuralNetworkBaseModel):
             self.activation_functions = [sigmoid] * (len(self.weights) - 1) + [softmax]
         else:
             self.activation_functions = activation_functions + [softmax]
+
+        self.optimizer = optimizer
+        self.optimizer.parameters = {'weights': self.weights, 'biases': self.biases}
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         a = x.reshape((-1, 1))
@@ -44,10 +50,13 @@ class MLP(NeuralNetworkBaseModel):
                                    zip(total_biases_change, sample_change_biases)]
 
         batch_size = len(x_set)
-        self.weights = [weight - lr / batch_size * weights_change
-                        for weight, weights_change in zip(self.weights, total_weights_change)]
-        self.biases = [biases - lr / batch_size * biases_change
-                       for biases, biases_change in zip(self.biases, total_biases_change)]
+        total_weights_change = [weight_change / batch_size for weight_change in total_weights_change]
+        total_biases_change = [biases_change / batch_size for biases_change in total_biases_change]
+
+        parameters_changes = {'weights': total_weights_change, 'biases': total_biases_change}
+        updated_parameters = self.optimizer.update_parameters(parameters_changes)
+        self.weights = updated_parameters['weights']
+        self.biases = updated_parameters['biases']
 
         y_pred = np.array([self.forward(x) for x in x_set])
         losses_after_update = self.calculate_losses(y_pred, y_set)

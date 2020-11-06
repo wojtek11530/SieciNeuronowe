@@ -6,7 +6,7 @@ from optimizers.base_optimizer import Optimizer
 
 
 class SGD(Optimizer):
-    def __init__(self, parameters: Dict[str, List[np.ndarray]] = None, learning_rate: float = 1e-3):
+    def __init__(self, parameters: Dict[str, List[np.ndarray]] = None, learning_rate: float = 1e-2):
         super().__init__(parameters)
         self._lr = learning_rate
 
