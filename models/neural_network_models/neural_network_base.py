@@ -13,7 +13,7 @@ class NeuralNetworkBaseModel(BaseModel):
         pass
 
     @abstractmethod
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) \
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: Optional[float] = None) \
             -> Tuple[bool, Optional[float]]:
         pass
 

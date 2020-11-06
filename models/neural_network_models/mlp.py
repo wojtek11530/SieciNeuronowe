@@ -37,7 +37,8 @@ class MLP(NeuralNetworkBaseModel):
             a = fn(z)
         return a
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) -> Tuple[bool, Optional[float]]:
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: Optional[float] = None) \
+            -> Tuple[bool, Optional[float]]:
 
         total_weights_change = [np.zeros(w.shape) for w in self.weights]
         total_biases_change = [np.zeros(b.shape) for b in self.biases]

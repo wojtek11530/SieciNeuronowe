@@ -9,7 +9,7 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 
 
 def train_model(model: NeuralNetworkBaseModel, x_train: np.ndarray, y_train: np.ndarray,
-                lr: float, batch_size: int, max_epochs: int,
+                batch_size: int, max_epochs: int, lr: Optional[float] = None,
                 x_val: Optional[np.ndarray] = None, y_val: Optional[np.ndarray] = None,
                 plot: bool = True, early_stop: bool = False, patience: int = 0) \
         -> Tuple[int, List[float], List[float], List[float]]:
