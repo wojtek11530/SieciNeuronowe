@@ -28,7 +28,7 @@ class MLP(NeuralNetworkBaseModel):
             self.activation_functions = activation_functions + [softmax]
 
         self.optimizer = optimizer
-        self.optimizer.parameters = {'weights': self.weights, 'biases': self.biases}
+        self.optimizer.set_parameters({'weights': self.weights, 'biases': self.biases})
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         a = x.reshape((-1, 1))

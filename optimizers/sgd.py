@@ -12,7 +12,7 @@ class SGD(Optimizer):
 
     def update_parameters(self, parameters_changes: Dict[str, List[np.ndarray]]) -> Dict[str, List[np.ndarray]]:
         for parameters_name, changes in parameters_changes.items():
-            self.parameters[parameters_name] = \
-                [params - self._lr * change for params, change in zip(self.parameters[parameters_name], changes)]
+            self._parameters[parameters_name] = \
+                [params - self._lr * change for params, change in zip(self._parameters[parameters_name], changes)]
 
-        return self.parameters
+        return self._parameters
