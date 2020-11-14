@@ -18,7 +18,7 @@ class Adagrad(Optimizer):
     def update_parameters(self, parameters_changes: Dict[str, List[np.ndarray]]) -> Dict[str, List[np.ndarray]]:
         for parameters_name, parameters_gradients in parameters_changes.items():
             self._previous_parameters_squared_gradients_sum[parameters_name] = \
-                [squared_gradients_sum + np.power(gradient, 2) for squared_gradients_sum, gradient in
+                [squared_gradients_sum + np.square(gradient) for squared_gradients_sum, gradient in
                  zip(self._previous_parameters_squared_gradients_sum[parameters_name], parameters_gradients)]
 
         for parameters_name, parameters_gradients in parameters_changes.items():
