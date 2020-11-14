@@ -19,7 +19,7 @@ def analyze_activation_functions():
     max_epochs = 7
     batch_size = 50
     weight_sd = 1.0
-    learning_rates = 1e-1
+    learning_rate = 1e-1
 
     act_functions = [sigmoid, relu]
     act_functions_names = ['sigmoid', 'relu']
@@ -112,7 +112,7 @@ def plot_accuracies_results(training_data_dictionary: Dict[str, Dict]):
 
 
 def plot_accuracies_boxplot(training_data_dictionary: Dict[str, Dict]):
-    last_epoch_accuracies = [values_dict['val_acc'][-1] for hidden_neuron_num, values_dict in
+    last_epoch_accuracies = [np.array(values_dict['val_acc'])[:, -1] for hidden_neuron_num, values_dict in
                              training_data_dictionary.items()]
     act_functions_names = training_data_dictionary.keys()
 
