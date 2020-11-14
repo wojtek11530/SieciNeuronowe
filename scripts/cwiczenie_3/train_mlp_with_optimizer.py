@@ -3,6 +3,7 @@ from functions.activation_functions import sigmoid
 from models.neural_network_models.mlp import MLP
 from models.neural_network_models.train_model import train_model
 from optimizers.momentum import Momentum
+from optimizers.nestorov_momentum import NestorovMomentum
 
 
 def run_training():
@@ -16,7 +17,7 @@ def run_training():
         input_dim=784, output_dim=10, hidden_dims=[30],
         activation_functions=[sigmoid],
         init_parameters_sd=1,
-        optimizer=Momentum(learning_rate=learning_rate, momentum_rate=0.7)
+        optimizer=NestorovMomentum(learning_rate=learning_rate, momentum_rate=0.7)
     )
 
     print(mlp_model)

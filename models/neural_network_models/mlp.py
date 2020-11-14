@@ -7,6 +7,7 @@ from functions.activation_functions import relu_derivative, sigmoid, sigmoid_der
 from functions.loss_functions import cross_entropy, cross_entropy_loss_with_softmax_derivative
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
 from optimizers.base_optimizer import Optimizer
+from optimizers.nestorov_momentum import NestorovMomentum
 from optimizers.sgd import SGD
 
 
@@ -87,7 +88,13 @@ class MLP(NeuralNetworkBaseModel):
             else:
                 fn_derivative = relu_derivative
 
-            next_layer_weights = self.weights[layer_index + 1]
+            if isinstance(self.optimizer, NestorovMomentum):
+                momentum_rate = self.optimizer.momentum_rate
+                prev_weights_changes = self.optimizer.previous_parameters_updates['weights'][layer_index + 1]
+                next_layer_weights = self.weights[layer_index + 1] - momentum_rate * prev_weights_changes
+            else:
+                next_layer_weights = self.weights[layer_index + 1]
+
             layer_z = zs[layer_index]
             deltas = np.dot(next_layer_weights.transpose(), deltas) * fn_derivative(layer_z)
             sample_biases_change[layer_index] = deltas
@@ -99,11 +106,26 @@ class MLP(NeuralNetworkBaseModel):
         a = x
         activations = [a]
         zs = []
-        for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
-            z = np.dot(weights, a) + bias
-            a = fn(z)
-            zs.append(a)
-            activations.append(a)
+
+        if isinstance(self.optimizer, NestorovMomentum):
+            momentum_rate = self.optimizer.momentum_rate
+            prev_weights_changes = self.optimizer.previous_parameters_updates['weights']
+            prev_biases = self.optimizer.previous_parameters_updates['biases']
+            for weights, weight_changes, bias, bias_changes, fn in \
+                    zip(self.weights, prev_weights_changes, self.biases, prev_biases, self.activation_functions):
+                used_weights = weights - momentum_rate * weight_changes
+                used_biases = bias - momentum_rate * bias_changes
+                z = np.dot(used_weights, a) + used_biases
+                a = fn(z)
+                zs.append(a)
+                activations.append(a)
+        else:
+            for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
+                z = np.dot(weights, a) + bias
+                a = fn(z)
+                zs.append(a)
+                activations.append(a)
+
         return activations, zs
 
     def save_model(self, file_name: str) -> None:
