@@ -107,8 +107,7 @@ def _get_optimizer_by_name(optimizer_name: str) -> Optimizer:
 
 def analyze_optimizers_from_file():
     file_name = \
-        "optimizer_analysis_data_['SGD', 'Momentum', 'Nestorov', 'Adagrad'," \
-        " 'Adadelta', 'Adam']_sigmoid_11-15-2020_12.51.pkl"
+        "optimizer_analysis_data_['SGD', 'Momentum', 'Nestorov', 'Adagrad', 'Adadelta', 'Adam']_11-14-2020_14.18.pkl"
     with open(file_name, 'rb') as handle:
         training_data_dictionary = pkl.load(handle)
         plot_losses_results(training_data_dictionary)
