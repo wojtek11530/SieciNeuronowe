@@ -6,12 +6,10 @@ import numpy as np
 
 class Initializer:
 
-    @staticmethod
     @abstractmethod
-    def init_weights(sizes: List[int]):
+    def init_weights(self, sizes: List[int]) -> List[np.ndarray]:
         pass
 
-    @staticmethod
     @abstractmethod
-    def init_biases(sizes: List[int]) -> List[np.ndarray]:
+    def init_biases(self, sizes: List[int]) -> List[np.ndarray]:
         pass
