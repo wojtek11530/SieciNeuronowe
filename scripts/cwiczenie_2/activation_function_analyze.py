@@ -19,7 +19,7 @@ def analyze_activation_functions():
     max_epochs = 7
     batch_size = 50
     weight_sd = 1.0
-    learning_rates = 1e-1
+    learning_rate = 1e-1
 
     act_functions = [sigmoid, relu]
     act_functions_names = ['sigmoid', 'relu']
@@ -37,13 +37,14 @@ def analyze_activation_functions():
             mlp_model = MLP(
                 input_dim=784, output_dim=10, hidden_dims=[30],
                 activation_functions=[act_fn],
-                init_parameters_sd=weight_sd
+                init_parameters_sd=weight_sd,
+                optimizer=SGD(learning_rate=learning_rate)
             )
 
             sim_overall_epoch_num, sim_training_losses, sim_validation_losses, sim_validation_accuracies = \
                 train_model(
                     mlp_model, x_train, y_train,
-                    lr=learning_rates, batch_size=batch_size, max_epochs=max_epochs,
+                    batch_size=batch_size, max_epochs=max_epochs,
                     x_val=x_val, y_val=y_val, plot=False
                 )
 
@@ -111,7 +112,7 @@ def plot_accuracies_results(training_data_dictionary: Dict[str, Dict]):
 
 
 def plot_accuracies_boxplot(training_data_dictionary: Dict[str, Dict]):
-    last_epoch_accuracies = [values_dict['val_acc'][-1] for hidden_neuron_num, values_dict in
+    last_epoch_accuracies = [np.array(values_dict['val_acc'])[:, -1] for hidden_neuron_num, values_dict in
                              training_data_dictionary.items()]
     act_functions_names = training_data_dictionary.keys()
 

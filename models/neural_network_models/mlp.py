@@ -6,12 +6,16 @@ import numpy as np
 from functions.activation_functions import relu_derivative, sigmoid, sigmoid_derivative, softmax, tanh, tanh_derivative
 from functions.loss_functions import cross_entropy, cross_entropy_loss_with_softmax_derivative
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
+from optimizers.base_optimizer import Optimizer
+from optimizers.nestorov_momentum import NestorovMomentum
+from optimizers.sgd import SGD
 
 
 class MLP(NeuralNetworkBaseModel):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: List[int],
                  init_parameters_sd: float = 1.0,
-                 activation_functions: Optional[List[Callable]] = None):
+                 activation_functions: Optional[List[Callable]] = None,
+                 optimizer: Optimizer = SGD()):
         self.input_dim = input_dim
         sizes = [input_dim] + hidden_dims + [output_dim]
 
@@ -24,6 +28,9 @@ class MLP(NeuralNetworkBaseModel):
         else:
             self.activation_functions = activation_functions + [softmax]
 
+        self.optimizer = optimizer
+        self.optimizer.set_parameters({'weights': self.weights, 'biases': self.biases})
+
     def forward(self, x: np.ndarray) -> np.ndarray:
         a = x.reshape((-1, 1))
         for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
@@ -31,7 +38,8 @@ class MLP(NeuralNetworkBaseModel):
             a = fn(z)
         return a
 
-    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: float) -> Tuple[bool, Optional[float]]:
+    def update_weight(self, x_set: np.ndarray, y_set: np.ndarray, lr: Optional[float] = None) \
+            -> Tuple[bool, Optional[float]]:
 
         total_weights_change = [np.zeros(w.shape) for w in self.weights]
         total_biases_change = [np.zeros(b.shape) for b in self.biases]
@@ -44,10 +52,13 @@ class MLP(NeuralNetworkBaseModel):
                                    zip(total_biases_change, sample_change_biases)]
 
         batch_size = len(x_set)
-        self.weights = [weight - lr / batch_size * weights_change
-                        for weight, weights_change in zip(self.weights, total_weights_change)]
-        self.biases = [biases - lr / batch_size * biases_change
-                       for biases, biases_change in zip(self.biases, total_biases_change)]
+        total_weights_change = [weight_change / batch_size for weight_change in total_weights_change]
+        total_biases_change = [biases_change / batch_size for biases_change in total_biases_change]
+
+        parameters_changes = {'weights': total_weights_change, 'biases': total_biases_change}
+        updated_parameters = self.optimizer.update_parameters(parameters_changes)
+        self.weights = updated_parameters['weights']
+        self.biases = updated_parameters['biases']
 
         y_pred = np.array([self.forward(x) for x in x_set])
         losses_after_update = self.calculate_losses(y_pred, y_set)
@@ -77,7 +88,13 @@ class MLP(NeuralNetworkBaseModel):
             else:
                 fn_derivative = relu_derivative
 
-            next_layer_weights = self.weights[layer_index + 1]
+            if isinstance(self.optimizer, NestorovMomentum):
+                momentum_rate = self.optimizer.momentum_rate
+                prev_weights_changes = self.optimizer.previous_parameters_updates['weights'][layer_index + 1]
+                next_layer_weights = self.weights[layer_index + 1] - momentum_rate * prev_weights_changes
+            else:
+                next_layer_weights = self.weights[layer_index + 1]
+
             layer_z = zs[layer_index]
             deltas = np.dot(next_layer_weights.transpose(), deltas) * fn_derivative(layer_z)
             sample_biases_change[layer_index] = deltas
@@ -89,11 +106,26 @@ class MLP(NeuralNetworkBaseModel):
         a = x
         activations = [a]
         zs = []
-        for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
-            z = np.dot(weights, a) + bias
-            a = fn(z)
-            zs.append(a)
-            activations.append(a)
+
+        if isinstance(self.optimizer, NestorovMomentum):
+            momentum_rate = self.optimizer.momentum_rate
+            prev_weights_changes = self.optimizer.previous_parameters_updates['weights']
+            prev_biases = self.optimizer.previous_parameters_updates['biases']
+            for weights, weight_changes, bias, bias_changes, fn in \
+                    zip(self.weights, prev_weights_changes, self.biases, prev_biases, self.activation_functions):
+                used_weights = weights - momentum_rate * weight_changes
+                used_biases = bias - momentum_rate * bias_changes
+                z = np.dot(used_weights, a) + used_biases
+                a = fn(z)
+                zs.append(a)
+                activations.append(a)
+        else:
+            for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
+                z = np.dot(weights, a) + bias
+                a = fn(z)
+                zs.append(a)
+                activations.append(a)
+
         return activations, zs
 
     def save_model(self, file_name: str) -> None:

@@ -5,6 +5,7 @@ from functions.activation_functions import sigmoid
 from models.neural_network_models.evaluate_model import evaluate_model
 from models.neural_network_models.mlp import MLP
 from models.neural_network_models.train_model import train_model
+from optimizers.sgd import SGD
 
 
 def run_training_and_evaluation():
@@ -13,17 +14,19 @@ def run_training_and_evaluation():
     hidden_dims = [100]
     activation_functions = [sigmoid, sigmoid]
     init_parameters_sd = 1
-    mlp_model = MLP(
-        input_dim=784, output_dim=10, hidden_dims=hidden_dims,
-        activation_functions=activation_functions,
-        init_parameters_sd=init_parameters_sd
-    )
-    print(mlp_model)
     learning_rate = 2e-1
     batch_size = 50
     max_epochs = 20
 
-    train_model(mlp_model, x_train, y_train, lr=learning_rate, batch_size=batch_size, max_epochs=max_epochs,
+    mlp_model = MLP(
+        input_dim=784, output_dim=10, hidden_dims=hidden_dims,
+        activation_functions=activation_functions,
+        init_parameters_sd=init_parameters_sd,
+        optimizer=SGD(learning_rate=learning_rate)
+    )
+    print(mlp_model)
+
+    train_model(mlp_model, x_train, y_train, batch_size=batch_size, max_epochs=max_epochs,
                 x_val=x_val, y_val=y_val, plot=True, early_stop=True, patience=2)
 
     file_name = f'mlp_model_{hidden_dims}_sd={init_parameters_sd}' + \
