@@ -8,6 +8,7 @@ from optimizers.adam import Adam
 from optimizers.momentum import Momentum
 from optimizers.nestorov_momentum import NestorovMomentum
 from optimizers.sgd import SGD
+from weight_initilization.he_initializer import HeInitializer
 from weight_initilization.xavier_initializer import XavierInitializer
 
 
@@ -22,7 +23,7 @@ def run_training():
         input_dim=784, output_dim=10, hidden_dims=[30],
         activation_functions=[sigmoid],
         optimizer=SGD(learning_rate=1e-1),
-        initializer=XavierInitializer()
+        initializer=HeInitializer()
     )
 
     print(mlp_model)
