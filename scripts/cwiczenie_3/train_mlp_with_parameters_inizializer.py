@@ -2,14 +2,9 @@ from dataset.mnist_dataset import load_data_wrapper
 from functions.activation_functions import sigmoid
 from models.neural_network_models.mlp import MLP
 from models.neural_network_models.train_model import train_model
-from optimizers.adadelta import Adadelta
-from optimizers.adagrad import Adagrad
-from optimizers.adam import Adam
-from optimizers.momentum import Momentum
-from optimizers.nestorov_momentum import NestorovMomentum
+
 from optimizers.sgd import SGD
 from weight_initilization.he_initializer import HeInitializer
-from weight_initilization.xavier_initializer import XavierInitializer
 
 
 def run_training():

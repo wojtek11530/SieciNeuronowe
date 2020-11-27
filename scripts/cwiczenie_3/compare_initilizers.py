@@ -98,7 +98,7 @@ def _get_initializer_by_name(initializer_name: str) -> Initializer:
 
 def analyze_initializers_from_file():
     file_name = \
-        "initializers_analysis_data_['Normal', 'Xavier', 'He']_sigmoid_11-20-2020_11.17.pkl"
+        "initializers_analysis_data_['Normal', 'Xavier', 'He']_relu_11-25-2020_12.51.pkl"
     with open(file_name, 'rb') as handle:
         training_data_dictionary = pkl.load(handle)
         plot_losses_results(training_data_dictionary)
@@ -158,5 +158,5 @@ def plot_accuracies_boxplot(data_dictionary: Dict[str, Dict]):
 
 
 if __name__ == '__main__':
-    analyze_initializers()
+    # analyze_initializers()
     analyze_initializers_from_file()
