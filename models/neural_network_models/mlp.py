@@ -9,19 +9,25 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 from optimizers.base_optimizer import Optimizer
 from optimizers.nestorov_momentum import NestorovMomentum
 from optimizers.sgd import SGD
+from weight_initilization.basa_initializer import Initializer
+from weight_initilization.normal_distr_initilizer import NormalDistributionInitializer
 
 
 class MLP(NeuralNetworkBaseModel):
     def __init__(self, input_dim: int, output_dim: int, hidden_dims: List[int],
                  init_parameters_sd: float = 1.0,
                  activation_functions: Optional[List[Callable]] = None,
-                 optimizer: Optimizer = SGD()):
+                 optimizer: Optimizer = SGD(),
+                 initializer: Optional[Initializer] = None):
+
         self.input_dim = input_dim
         sizes = [input_dim] + hidden_dims + [output_dim]
 
-        self.weights = [np.random.normal(0, init_parameters_sd, size=(sizes[i + 1], sizes[i]))
-                        for i in range(len(sizes) - 1)]
-        self.biases = [np.random.normal(0, init_parameters_sd, size=(sizes[i + 1], 1)) for i in range(len(sizes) - 1)]
+        if initializer is None:
+            initializer = NormalDistributionInitializer(init_parameters_sd)
+
+        self.weights = initializer.init_weights(sizes)
+        self.biases = initializer.init_biases(sizes)
 
         if activation_functions is None:
             self.activation_functions = [sigmoid] * (len(self.weights) - 1) + [softmax]

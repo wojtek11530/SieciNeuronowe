@@ -19,7 +19,7 @@ from optimizers.nestorov_momentum import NestorovMomentum
 from optimizers.sgd import SGD
 
 simulation_number = 10
-act_function = relu
+act_function = sigmoid
 max_epochs = 7
 batch_size = 50
 hidden_dims = [100]
@@ -107,7 +107,7 @@ def _get_optimizer_by_name(optimizer_name: str) -> Optimizer:
 
 def analyze_optimizers_from_file():
     file_name = \
-        "optimizer_analysis_data_['SGD', 'Momentum', 'Nestorov', 'Adagrad', 'Adadelta', 'Adam']_11-14-2020_14.18.pkl"
+        "optimizer_analysis_data_['SGD', 'Momentum', 'Nestorov', 'Adagrad', 'Adadelta', 'Adam']_sigmoid_11-27-2020_10.31.pkl"
     with open(file_name, 'rb') as handle:
         training_data_dictionary = pkl.load(handle)
         plot_losses_results(training_data_dictionary)
@@ -167,5 +167,5 @@ def plot_accuracies_boxplot(data_dictionary: Dict[str, Dict]):
 
 
 if __name__ == '__main__':
-    analyze_optimizers()
-    # analyze_optimizers_from_file()
+    # analyze_optimizers()
+    analyze_optimizers_from_file()

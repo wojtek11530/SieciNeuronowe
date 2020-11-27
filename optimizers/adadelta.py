@@ -6,7 +6,7 @@ from optimizers.base_optimizer import Optimizer
 
 
 class Adadelta(Optimizer):
-    def __init__(self, parameters: Dict[str, List[np.ndarray]] = None, gamma: float = 0.9, eps: float = 10e-8):
+    def __init__(self, parameters: Dict[str, List[np.ndarray]] = None, gamma: float = 0.9, eps: float = 1e-5):
         super().__init__(parameters)
         self._parameters_squared_gradients_mean = {}
         self._parameters_squared_updates_mean = {}
