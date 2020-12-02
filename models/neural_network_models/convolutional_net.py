@@ -5,6 +5,7 @@ import numpy as np
 
 from functions.activation_functions import sigmoid, softmax
 from models.neural_network_models.convolution_net_components.convolution_layer import Conv2D
+from models.neural_network_models.convolution_net_components.pooling_layer import MaxPool2D
 from models.neural_network_models.neural_network_base import NeuralNetworkBaseModel
 from optimizers.base_optimizer import Optimizer
 from optimizers.sgd import SGD
@@ -25,6 +26,8 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
         self.convolutional_layer = Conv2D(out_channels=32, kernel_size=3, padding=1, stride=1)
         self.convolutional_layer.init_parameters(input_dim)
 
+        self.max_pooling = MaxPool2D(kernel_size=2, padding=0, stride=2)
+
         self.fc_input_dim = fc_input_dim
         sizes = [fc_input_dim] + hidden_dims + [output_dim]
         self.weights = initializer.init_weights(sizes)
@@ -41,6 +44,7 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
     def forward(self, x: np.ndarray) -> np.ndarray:
 
         out = self.convolutional_layer(x)
+        out = self.max_pooling(out)
         a = out.reshape((-1, 1))
         for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
             z = np.dot(weights, a) + bias

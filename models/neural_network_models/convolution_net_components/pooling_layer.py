@@ -37,8 +37,9 @@ class MaxPool2D:
             j_out = 0
             while j <= padded_x.shape[1] - self.kernel_size:
                 window = padded_x[i: i + self.kernel_size, j: j + self.kernel_size]
-                max_value = np.max(window)
-                index = np.argwhere(window == max_value)
+
+                index = np.unravel_index(window.argmax(), window.shape)
+                max_value = window[index]
                 out[i_out, j_out] = max_value
                 indexes[i_out, j_out] = index
 
