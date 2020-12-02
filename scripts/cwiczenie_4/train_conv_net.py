@@ -21,6 +21,7 @@ def run_training():
     max_epochs = 8
 
     conv_net = ConvolutionalNet(
+        input_dim=(28, 28),
         fc_input_dim=25088, output_dim=10, hidden_dims=[128],
         activation_functions=[relu],
         optimizer=SGD(learning_rate=learning_rate),
