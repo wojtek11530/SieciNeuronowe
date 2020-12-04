@@ -24,7 +24,7 @@ def run_training():
     x_val = x_val[:200]
     y_val = y_val[:200]
 
-    learning_rate = 0.1
+    learning_rate = 5e-3
     batch_size = 50
     max_epochs = 8
     kernel_number = 4
@@ -43,7 +43,7 @@ def run_training():
         kernel_size=kernel_size,
         fc_input_dim=kernel_number * output_feature_map_dim ** 2, output_dim=10, hidden_dims=[128],
         activation_functions=[relu],
-        optimizer=SGD(learning_rate=learning_rate),
+        optimizer=Adam(learning_rate=learning_rate),
         initializer=HeInitializer()
     )
 
