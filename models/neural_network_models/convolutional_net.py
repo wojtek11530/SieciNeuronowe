@@ -16,20 +16,26 @@ from weight_initilization.normal_distr_initilizer import NormalDistributionIniti
 
 
 class ConvolutionalNet(NeuralNetworkBaseModel):
-    def __init__(self, input_dim: Tuple[int, int], fc_input_dim: int, output_dim: int, hidden_dims: List[int],
+    def __init__(self, input_dim: Tuple[int, int],
+                 fc_input_dim: int, output_dim: int, hidden_dims: List[int],
                  kernel_number: int,
+                 kernel_size: int,
                  init_parameters_sd: float = 1.0,
                  activation_functions: Optional[List[Callable]] = None,
                  optimizer: Optimizer = SGD(),
-                 initializer: Optional[Initializer] = None):
+                 initializer: Optional[Initializer] = None,
+                 max_pooling_bool: bool = True):
+
+        self.max_pooling_bool = max_pooling_bool
 
         if initializer is None:
             initializer = NormalDistributionInitializer(init_parameters_sd)
 
-        self.convolutional_layer = Conv2D(out_channels=kernel_number, kernel_size=3, padding=1, stride=1)
+        self.convolutional_layer = Conv2D(out_channels=kernel_number, kernel_size=kernel_size, padding=1, stride=1)
         self.convolutional_layer.init_parameters(input_dim)
 
-        self.max_pooling = MaxPool2D(kernel_size=2, padding=0, stride=2)
+        if self.max_pooling_bool:
+            self.max_pooling = MaxPool2D(kernel_size=2, padding=0, stride=2)
 
         self.fc_input_dim = fc_input_dim
         sizes = [fc_input_dim] + hidden_dims + [output_dim]
@@ -49,8 +55,9 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
     def forward(self, x: np.ndarray) -> np.ndarray:
 
         out = self.convolutional_layer(x)
+        if self.max_pooling_bool:
+            out = self.max_pooling(out)
         out = relu(out)
-        # out = self.max_pooling(out)
         a = out.reshape((-1, 1))
         for weights, bias, fn in zip(self.weights, self.biases, self.activation_functions):
             z = np.dot(weights, a) + bias
@@ -106,7 +113,7 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
         sample_weights_change = [np.zeros(w.shape) for w in self.weights]
         sample_biases_change = [np.zeros(b.shape) for b in self.biases]
 
-        conv_out, activations, zs = self._get_conv_layer_output_activations_and_z_for_layers(x)
+        conv_out, pooling_out, activations, zs = self._get_conv_layer_output_activations_and_z_for_layers(x)
 
         deltas = cross_entropy_loss_with_softmax_derivative(activations[-1], y_real)
         sample_biases_change[-1] = deltas
@@ -128,21 +135,40 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
             sample_biases_change[layer_index] = deltas
             sample_weights_change[layer_index] = np.dot(deltas, activations[layer_index].transpose())
 
-        deltas = np.dot(self.weights[0].transpose(), deltas) * relu_derivative(conv_out)
-        deltas = deltas.reshape(self.convolutional_layer.get_output_dim(x))
+        deltas = np.dot(self.weights[0].transpose(), deltas) * relu_derivative(pooling_out)
 
-        sample_filter_weights_changes = self.convolutional_layer.get_weights_gradients(x, deltas)
-        sample_filter_biases_changes = np.array([np.sum(output_channels_deltas) for output_channels_deltas in deltas])
+        if self.max_pooling_bool:
+            deltas = deltas.reshape(self.max_pooling.get_output_dim(conv_out))
+            upsampled_deltas = np.zeros(shape=self.convolutional_layer.get_output_dim(x))
+            for upsampled_deltas_channel, deltas_channel, max_indexes_channel in \
+                    zip(upsampled_deltas, deltas, self.max_pooling.max_indexes):
+                for i in range(deltas_channel.shape[0]):
+                    for j in range(deltas_channel.shape[1]):
+                        index_row = max_indexes_channel[i][j][0]
+                        index_col = max_indexes_channel[i][j][1]
+                        upsampled_deltas_channel[index_row][index_col] += deltas_channel[i][j]
+        else:
+            deltas = deltas.reshape(self.convolutional_layer.get_output_dim(x))
+            upsampled_deltas = deltas
+
+        sample_filter_weights_changes = self.convolutional_layer.get_weights_gradients(x, upsampled_deltas)
+        sample_filter_biases_changes = np.array([np.sum(output_channels_deltas)
+                                                 for output_channels_deltas in upsampled_deltas])
 
         return sample_weights_change, sample_biases_change, sample_filter_weights_changes, sample_filter_biases_changes
 
     def _get_conv_layer_output_activations_and_z_for_layers(self, x: np.ndarray) -> \
-            Tuple[np.ndarray, List[np.ndarray], List[np.ndarray]]:
+            Tuple[np.ndarray, np.ndarray, List[np.ndarray], List[np.ndarray]]:
 
-        conv_out = self.convolutional_layer(x).reshape((-1, 1))
-        conv_out_activated = relu(conv_out)
-        # out = self.max_pooling(out)
-        a = conv_out_activated
+        conv_out = self.convolutional_layer(x)
+
+        if self.max_pooling_bool:
+            pooling_out = self.max_pooling(conv_out).reshape((-1, 1))
+        else:
+            pooling_out = conv_out.reshape((-1, 1))
+
+        pooling_out_activated = relu(pooling_out)
+        a = pooling_out_activated
         activations = [a]
         zs = []
 
@@ -152,7 +178,7 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
             zs.append(a)
             activations.append(a)
 
-        return conv_out, activations, zs
+        return conv_out, pooling_out, activations, zs
 
     def save_model(self, file_name: str) -> None:
         model_dict = self.get_model_parameters_as_dict()

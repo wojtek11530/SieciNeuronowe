@@ -2,6 +2,7 @@ import math
 from typing import Tuple, List
 
 import numpy as np
+from scipy.signal import convolve2d as scipy_convolve2d
 
 
 class Conv2D:
@@ -46,27 +47,28 @@ class Conv2D:
 
 
 def convolve2d(x: np.ndarray, kernel: np.ndarray, padding: int = 0, stride: int = 1) -> np.ndarray:
-    in_height, in_width = x.shape
-    kernel_height, kernel_width = kernel.shape
-
     padded_x = get_padded_x(x, padding=padding)
 
-    out_height = math.floor((in_height - kernel_height + 2 * padding) / stride + 1)
-    out_width = math.floor((in_width - kernel_width + 2 * padding) / stride + 1)
+    out = scipy_convolve2d(padded_x, np.rot90(kernel, 2), mode='valid')
 
-    out = np.zeros(shape=(out_height, out_width))
-    i_out = 0
-    i = 0
-    while i <= padded_x.shape[0] - kernel_height:
-        j = 0
-        j_out = 0
-        while j <= padded_x.shape[1] - kernel_width:
-            out[i_out, j_out] = np.sum(padded_x[i: i + kernel_height, j: j + kernel_width] * kernel)
-            j += stride
-            j_out += 1
+    # in_height, in_width = x.shape
+    # kernel_height, kernel_width = kernel.shape
+    # out_height = math.floor((in_height - kernel_height + 2 * padding) / stride + 1)
+    # out_width = math.floor((in_width - kernel_width + 2 * padding) / stride + 1)
 
-        i += stride
-        i_out += 1
+    # out = np.zeros(shape=(out_height, out_width))
+    # i_out = 0
+    # i = 0
+    # while i <= padded_x.shape[0] - kernel_height:
+    #     j = 0
+    #     j_out = 0
+    #     while j <= padded_x.shape[1] - kernel_width:
+    #         out[i_out, j_out] = np.sum(padded_x[i: i + kernel_height, j: j + kernel_width] * kernel)
+    #         j += stride
+    #         j_out += 1
+    #
+    #     i += stride
+    #     i_out += 1
 
     return out
 

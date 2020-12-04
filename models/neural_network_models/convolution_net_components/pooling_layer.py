@@ -14,7 +14,7 @@ class MaxPool2D:
 
     def forward(self, x: np.ndarray) -> np.ndarray:
         out, max_indexes = map(list, zip(*[self.max_pool2d(x_channel) for x_channel in x]))
-        self.max_indexes = np.array(max_indexes)
+        self.max_indexes = np.array(max_indexes, dtype=int)
         return np.array(out)
 
     def __call__(self, x: np.ndarray):
@@ -41,7 +41,8 @@ class MaxPool2D:
                 index = np.unravel_index(window.argmax(), window.shape)
                 max_value = window[index]
                 out[i_out, j_out] = max_value
-                indexes[i_out, j_out] = index
+                indexes[i_out, j_out][0] += i + index[0] - self.padding
+                indexes[i_out, j_out][1] += j + index[1] - self.padding
 
                 j += self.stride
                 j_out += 1
@@ -50,6 +51,13 @@ class MaxPool2D:
             i_out += 1
 
         return out, indexes
+
+    def get_output_dim(self, x: np.ndarray) -> Tuple[int, int, int]:
+        out_channels, in_height, in_width = x.shape
+        out_height = self._get_output_dim(in_height)
+        out_width = self._get_output_dim(in_width)
+
+        return out_channels, out_height, out_width
 
     def _get_padded_x(self, in_height: int, in_width: int, x: np.ndarray) -> np.ndarray:
         padded_x = np.zeros(shape=(in_height + 2 * self.padding, in_width + 2 * self.padding))

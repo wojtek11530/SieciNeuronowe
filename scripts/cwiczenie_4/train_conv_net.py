@@ -1,10 +1,12 @@
-import matplotlib.pyplot as plt
+import math
+
 import numpy as np
 
 from dataset.mnist_dataset import load_data_wrapper
 from functions.activation_functions import sigmoid, relu
 from models.neural_network_models.convolutional_net import ConvolutionalNet
 from models.neural_network_models.train_model import train_model
+from optimizers.adam import Adam
 from optimizers.sgd import SGD
 from weight_initilization.he_initializer import HeInitializer
 
@@ -22,33 +24,45 @@ def run_training():
     x_val = x_val[:200]
     y_val = y_val[:200]
 
-    learning_rate = 0.2
+    learning_rate = 0.1
     batch_size = 50
     max_epochs = 8
+    kernel_number = 4
+    kernel_size = 5
+    padding = 1
+    stride = 1
+    max_pooling = True
+
+    output_feature_map_dim = math.floor((28 - kernel_size + 2 * padding) / stride + 1)
+    if max_pooling:
+        output_feature_map_dim = math.floor(output_feature_map_dim / 2)
 
     conv_net = ConvolutionalNet(
         input_dim=(28, 28),
-        kernel_number=1,
-        fc_input_dim=784, output_dim=10, hidden_dims=[128],
-        activation_functions=[sigmoid],
+        kernel_number=kernel_number,
+        kernel_size=kernel_size,
+        fc_input_dim=kernel_number * output_feature_map_dim ** 2, output_dim=10, hidden_dims=[128],
+        activation_functions=[relu],
         optimizer=SGD(learning_rate=learning_rate),
         initializer=HeInitializer()
     )
 
     print(conv_net)
 
-    # limit = 1
-    # i = 1
-    # for x, y in zip(x_train, y_train):
-    #     y_hat = conv_net(x)
-    #     print(f'y_real:\n{y}')
-    #     print(f'\ny_hat:\n{y_hat}')
-    #     i += 1
-    #     if i > limit:
-    #         break
+    index = 1
+    x, y = x_test[index, :], y_test[index, :]
+    y_hat = conv_net(x)
+    print(f'y_real:\n{y}')
+    print('Before learning')
+    print(f'\ny_hat:\n{y_hat}')
 
     train_model(conv_net, x_train, y_train, batch_size=batch_size, max_epochs=max_epochs,
                 x_val=x_val, y_val=y_val, plot=True)
+
+    y_hat = conv_net(x)
+    print(f'y_real:\n{y}')
+    print('After learning')
+    print(f'\ny_hat:\n{y_hat}')
 
 
 if __name__ == '__main__':
