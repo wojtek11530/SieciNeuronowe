@@ -5,6 +5,7 @@ import numpy as np
 from dataset.mnist_dataset import load_data_wrapper
 from functions.activation_functions import sigmoid, relu
 from models.neural_network_models.convolutional_net import ConvolutionalNet
+from models.neural_network_models.evaluate_model import evaluate_model
 from models.neural_network_models.train_model import train_model
 from optimizers.adam import Adam
 from optimizers.sgd import SGD
@@ -18,17 +19,17 @@ def run_training():
     x_val = np.array([np.reshape(x, (28, 28)) for x in x_val])
     x_test = np.array([np.reshape(x, (28, 28)) for x in x_test])
 
-    x_train = x_train[:2000]
-    y_train = y_train[:2000]
+    x_train = x_train[:5000]
+    y_train = y_train[:5000]
 
-    x_val = x_val[:200]
-    y_val = y_val[:200]
+    x_val = x_val[:500]
+    y_val = y_val[:500]
 
     learning_rate = 5e-3
     batch_size = 50
-    max_epochs = 8
+    max_epochs = 5
     kernel_number = 4
-    kernel_size = 5
+    kernel_size = 7
     padding = 1
     stride = 1
     max_pooling = True
@@ -63,6 +64,8 @@ def run_training():
     print(f'y_real:\n{y}')
     print('After learning')
     print(f'\ny_hat:\n{y_hat}')
+
+    evaluate_model(conv_net, x_test, y_test)
 
 
 if __name__ == '__main__':

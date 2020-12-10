@@ -11,7 +11,6 @@ from models.neural_network_models.neural_network_base import NeuralNetworkBaseMo
 
 
 def evaluate_model(model: NeuralNetworkBaseModel, x_test: np.ndarray, y_test: np.ndarray):
-    print('\nModel evaluation:')
     y_label = np.argmax(y_test, axis=1).flatten()
     y_pred = np.array([model(x) for x in tqdm(x_test, desc='Model evaluation', file=sys.stdout)])
     y_pred_label = np.argmax(y_pred, axis=1).flatten()
