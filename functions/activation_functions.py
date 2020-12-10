@@ -38,4 +38,4 @@ def relu_derivative(z: np.ndarray) -> np.ndarray:
     derivative = np.zeros(shape=z.shape)
     derivative[z > 0] = 1
     derivative[z == 0.5] = 0.5
-    return z
+    return derivative
