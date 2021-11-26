@@ -19,17 +19,17 @@ def run_training():
     x_val = np.array([np.reshape(x, (28, 28)) for x in x_val])
     x_test = np.array([np.reshape(x, (28, 28)) for x in x_test])
 
-    x_train = x_train[:5000]
-    y_train = y_train[:5000]
-
+    # x_train = x_train[:5000]
+    # y_train = y_train[:5000]
+    #
     x_val = x_val[:500]
     y_val = y_val[:500]
 
     learning_rate = 5e-3
     batch_size = 50
-    max_epochs = 5
+    max_epochs = 7
     kernel_number = 4
-    kernel_size = 7
+    kernel_size = 5
     padding = 1
     stride = 1
     max_pooling = True

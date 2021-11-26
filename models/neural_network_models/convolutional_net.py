@@ -53,7 +53,6 @@ class ConvolutionalNet(NeuralNetworkBaseModel):
                                        'conv_biases': self.convolutional_layer.biases})
 
     def forward(self, x: np.ndarray) -> np.ndarray:
-
         out = self.convolutional_layer(x)
         if self.max_pooling_bool:
             out = self.max_pooling(out)
